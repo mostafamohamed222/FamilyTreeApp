@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treeapp/Screen/member.dart';
 
 class CardCustome extends StatefulWidget {
   CardCustome({Key key}) : super(key: key);
@@ -12,6 +13,14 @@ class _CardCustomeState extends State<CardCustome> {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Member(),
+            ),
+          );
+        },
         title: Text(
           "احمد حسن علي احمد",
           textAlign: TextAlign.end,
