@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:treeapp/Screen/MyDrawer.dart';
 import 'package:treeapp/Screen/listview.dart';
 import 'package:treeapp/Screen/treepage.dart';
 
@@ -13,7 +15,11 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: ch.length,
       child: Scaffold(
+        drawer: MyDrawer(),
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.brown,
+          ),
           backgroundColor: Colors.white,
           title: TabBar(
             indicatorColor: Colors.yellow,

@@ -32,8 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Center(
               child: Form(
                 key: _formKey,
-                child: SingleChildScrollView(
-                  child: Column(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: ListView(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -45,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         // ),
                       ),
                       Text(
-                        'تسجيل الدخول                                            ',
+                        'تسجيل الدخول',
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           color: Colors.brown,
@@ -69,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   icon: Icon(Icons.mobile_friendly_sharp),
                                   border: OutlineInputBorder(),
                                 ),
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.phone,
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'من فضلك أدخل رقم هاتفك ';
@@ -90,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.brown,
                           child: MaterialButton(
-                            onPressed: () async {
+                            onPressed: () {
                               final String phone = _numberTextController.text;
                               if (_formKey.currentState.validate()) {
                                 Navigator.push(
