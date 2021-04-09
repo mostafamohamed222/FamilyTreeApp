@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:treeapp/Screen/LoginScreen.dart';
 import 'package:treeapp/Screen/connectwithus.dart';
 
+import 'aboutapp.dart';
+
 class MyDrawer extends StatefulWidget {
   @override
   _MyDrawerState createState() => _MyDrawerState();
@@ -65,7 +67,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext) => ContactUs(),
+                      builder: (BuildContext) => AboutUs(),
                     ),
                   );
                 },

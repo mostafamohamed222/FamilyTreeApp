@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:treeapp/widget/search.dart';
 import 'package:graphite/graphite.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
 import 'dart:ui';
-import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
 import 'package:graphite/core/matrix.dart';
 import 'package:graphite/core/typings.dart';
-import 'package:graphite/graphite.dart';
 
 import 'member.dart';
 
@@ -34,28 +32,32 @@ class _FamilyTreeState extends State<FamilyTree> {
       children: [
         Search(),
         Expanded(
-          child: DirectGraph(
-            builder: (BuildContext, MatrixNode) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Member(),
-                    ),
-                  );
-                },
-                child: Image(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://img.freepik.com/free-photo/mand-holding-cup_1258-340.jpg?size=626&ext=jpg"),
-                ),
-              );
-            },
-            list: list,
-            cellWidth: 136.0,
-            cellPadding: 18.0,
-            orientation: MatrixOrientation.Vertical,
+          child: Zoom(
+            width: 1800,
+            height: 1800,
+            child: DirectGraph(
+              builder: (BuildContext, MatrixNode) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Member(),
+                      ),
+                    );
+                  },
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                        "https://img.freepik.com/free-photo/mand-holding-cup_1258-340.jpg?size=626&ext=jpg"),
+                  ),
+                );
+              },
+              list: list,
+              cellWidth: 136.0,
+              cellPadding: 18.0,
+              orientation: MatrixOrientation.Vertical,
+            ),
           ),
         )
       ],
