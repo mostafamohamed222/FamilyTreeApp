@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/member.dart';
+import 'package:treeapp/models/memberContorller.dart';
 
 class CardCustome extends StatefulWidget {
-  CardCustome({Key key}) : super(key: key);
+  final String name, image, job, city, id;
+  final String age;
+
+  CardCustome({this.age, this.city, this.image, this.job, this.name, this.id});
 
   @override
   _CardCustomeState createState() => _CardCustomeState();
@@ -14,6 +19,9 @@ class _CardCustomeState extends State<CardCustome> {
     return Card(
       child: ListTile(
         onTap: () {
+          Provider.of<MemberContorller>(context, listen: false)
+              .getMemberById(widget.id);
+          print("asdasd");
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -22,7 +30,7 @@ class _CardCustomeState extends State<CardCustome> {
           );
         },
         title: Text(
-          "احمد حسن علي احمد",
+          widget.name,
           textAlign: TextAlign.end,
           style: TextStyle(fontSize: 24),
         ),
@@ -30,18 +38,19 @@ class _CardCustomeState extends State<CardCustome> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "مدينة جدة",
+              widget.city,
               style: TextStyle(color: Colors.brown),
             ),
-            Text("60 عاما", style: TextStyle(color: Colors.brown)),
-            Text("طبيب عام", style: TextStyle(color: Colors.brown)),
+            Text("${widget.age} عاما", style: TextStyle(color: Colors.brown)),
+            Text(widget.job, style: TextStyle(color: Colors.brown)),
           ],
         ),
-        trailing: Image(
-          fit: BoxFit.fill,
-          width: MediaQuery.of(context).size.width / 4,
-          image: NetworkImage(
-              "https://img.freepik.com/free-photo/handsome-young-businessman-shirt-eyeglasses_85574-6228.jpg?size=626&ext=jpg"),
+        trailing: Container(
+          child: Image(
+            fit: BoxFit.fill,
+            width: MediaQuery.of(context).size.width / 4,
+            image: NetworkImage(widget.image),
+          ),
         ),
       ),
     );

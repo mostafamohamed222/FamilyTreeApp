@@ -51,12 +51,16 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   );
                 },
-                child: Text(
-                  "تواصل معنا",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    "تواصل معنا",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.end,
+                  ),
                 ),
               ),
               SizedBox(
@@ -71,12 +75,16 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   );
                 },
-                child: Text(
-                  "حول التطبيق  ",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    "حول التطبيق  ",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               SizedBox(
@@ -89,12 +97,16 @@ class _MyDrawerState extends State<MyDrawer> {
                       MaterialPageRoute(
                           builder: (BuildContext) => LoginScreen()));
                 },
-                child: Text(
-                  "تسجيل الخروج",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    "تسجيل الخروج",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

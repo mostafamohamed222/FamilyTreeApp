@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/MemberFamily.dart';
 import 'package:treeapp/Screen/details.dart';
+import 'package:treeapp/models/memberContorller.dart';
 
 class Member extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 3,
       length: hch.length,
       child: Scaffold(
         appBar: AppBar(
