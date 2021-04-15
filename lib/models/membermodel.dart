@@ -1,6 +1,36 @@
 class MemberModel {
   String id, name, image, job, city;
   String age;
+  int numberOfSons = 2;
+  List<dynamic> sons, parents, couple;
+  List<dynamic> allsons = [];
+  List<dynamic> allparents = [];
+  List<dynamic> allcouples = [];
+  int nodeNumber = 0;
 
-  MemberModel({this.id, this.name, this.image, this.job, this.age, this.city});
+  void setNodeMember(int x) {
+    nodeNumber = x;
+  }
+
+  MemberModel({
+    this.id,
+    this.name,
+    this.image,
+    this.job,
+    this.age,
+    this.city,
+    this.sons,
+    this.parents,
+    this.couple,
+  });
+
+  void printModel() {
+    print(name);
+    print(age);
+    print(image);
+    print(city);
+    print(job);
+    print(sons);
+    print(parents);
+  }
 }

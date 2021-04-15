@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/MemberFamily.dart';
 import 'package:treeapp/Screen/details.dart';
+import 'package:treeapp/Screen/memberparent.dart';
 import 'package:treeapp/models/memberContorller.dart';
+
+import 'MemberCouple.dart';
 
 class Member extends StatelessWidget {
   @override
@@ -37,10 +40,14 @@ class Member extends StatelessWidget {
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
-                        "https://img.freepik.com/free-photo/handsome-young-businessman-shirt-eyeglasses_85574-6228.jpg?size=626&ext=jpg"),
+                        Provider.of<MemberContorller>(context, listen: false)
+                            .currentModel
+                            .image),
                   ),
                   Text(
-                    "احمد محمد علي حسن",
+                    Provider.of<MemberContorller>(context, listen: false)
+                        .currentModel
+                        .name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -92,7 +99,7 @@ class Choice {
 
 List<Choice> hch = [
   Choice(title: "الازواج"),
-  Choice(title: "الإخوة"),
+  Choice(title: "الابناء"),
   Choice(title: "الوالدين"),
   Choice(title: "تفاصيل"),
 ];
@@ -103,6 +110,12 @@ class PageChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return choice.title == "تفاصيل" ? Details() : MemberFamily();
+    return choice.title == "تفاصيل"
+        ? Details()
+        : choice.title == "الابناء"
+            ? MemberSons()
+            : choice.title == "الوالدين"
+                ? MemberParents()
+                : MemberCouple();
   }
 }

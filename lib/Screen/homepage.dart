@@ -74,6 +74,6 @@ class PageChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return choice.icon == Icons.list_rounded ? FamilyList() : FamilyTree();
+    return choice.icon == Icons.list_rounded ? FamilyList() : GraphViewPage();
   }
 }

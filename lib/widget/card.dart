@@ -21,7 +21,6 @@ class _CardCustomeState extends State<CardCustome> {
         onTap: () {
           Provider.of<MemberContorller>(context, listen: false)
               .getMemberById(widget.id);
-          print("asdasd");
           Navigator.push(
             context,
             MaterialPageRoute(

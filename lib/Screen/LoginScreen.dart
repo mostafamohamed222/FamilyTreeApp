@@ -93,13 +93,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.brown,
                           child: MaterialButton(
                             onPressed: () {
-                              final String phone = _numberTextController.text;
+                              final String phonenumber =
+                                  _numberTextController.text;
                               if (_formKey.currentState.validate()) {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            VerificationScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => VerificationScreen(
+                                      phone: phonenumber,
+                                    ),
+                                  ),
+                                );
                               } else {
                                 // Fluttertoast.showToast(
                                 //     msg:

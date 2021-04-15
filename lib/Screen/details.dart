@@ -8,6 +8,9 @@ class Details extends StatelessWidget {
   @override
   @override
   Widget build(BuildContext context) {
+    Provider.of<MemberContorller>(context, listen: false)
+        .currentModel
+        .printModel();
     return Container(
       child: ListView(
         children: [

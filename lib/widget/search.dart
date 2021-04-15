@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/memberContorller.dart';
 
 class Search extends StatefulWidget {
   Search({Key key}) : super(key: key);
@@ -8,6 +11,10 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  TextEditingController _numberTextController = TextEditingController();
+
+  List<String> listItems = ["مكة", "جدة"];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,6 +39,12 @@ class _SearchState extends State<Search> {
             width: MediaQuery.of(context).size.width / 1.5,
             height: 30,
             child: TextField(
+              onSubmitted: (String value) {
+                print(_numberTextController.text);
+                Provider.of<MemberContorller>(context, listen: false)
+                    .searchByName(_numberTextController.text);
+              },
+              controller: _numberTextController,
               decoration: InputDecoration(
                 labelText: "                                    البحث",
                 prefixIcon: Icon(Icons.search),

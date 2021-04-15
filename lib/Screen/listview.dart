@@ -49,28 +49,20 @@ class _FamilyListState extends State<FamilyList> {
         } else {
           return ListView.builder(
             scrollDirection: Axis.vertical,
-            itemCount: Provider.of<MemberContorller>(context).allMember.length,
+            itemCount: Provider.of<MemberContorller>(context).select.length,
             itemBuilder: (context, index) {
               return Container(
                 child: CardCustome(
-                  id: Provider.of<MemberContorller>(context)
-                      .allMember[index]
-                      .id,
-                  age: Provider.of<MemberContorller>(context)
-                      .allMember[index]
-                      .age,
-                  city: Provider.of<MemberContorller>(context)
-                      .allMember[index]
-                      .city,
+                  id: Provider.of<MemberContorller>(context).select[index].id,
+                  age: Provider.of<MemberContorller>(context).select[index].age,
+                  city:
+                      Provider.of<MemberContorller>(context).select[index].city,
                   image: Provider.of<MemberContorller>(context)
-                      .allMember[index]
+                      .select[index]
                       .image,
-                  job: Provider.of<MemberContorller>(context)
-                      .allMember[index]
-                      .job,
-                  name: Provider.of<MemberContorller>(context)
-                      .allMember[index]
-                      .name,
+                  job: Provider.of<MemberContorller>(context).select[index].job,
+                  name:
+                      Provider.of<MemberContorller>(context).select[index].name,
                 ),
               );
             },

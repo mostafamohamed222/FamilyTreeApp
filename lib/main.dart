@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:treeapp/models/memberContorller.dart';
 
 import 'Screen/LoginScreen.dart';
+import 'Screen/LoginScreen.dart';
+import 'Screen/homepage.dart';
 
 void main() {
   // http.post(
@@ -20,6 +22,11 @@ void main() {
   //       "image":
   //           "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
   //       "city": "جدة",
+  //       "parent": {
+  //         "mother": "-MXv_RBltqYDChPuGVf3",
+  //         "father": "-MXv_RBltqYDChPuGVf3",
+  //       },
+  //       "son": ["-MY0Vp3Lbn8GKHWXrMs3", "-MY0Vp3Lbn8GKHWXrMs3"],
   //     },
   //   ),
   // );
