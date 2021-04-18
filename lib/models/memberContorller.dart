@@ -35,6 +35,7 @@ class MemberContorller with ChangeNotifier {
           name: value['name'],
           age: value['age'],
           city: value['city'],
+          gender: value['gender'],
           job: value['job'],
           sons: value['son'],
           parents: value['parent'],
@@ -44,44 +45,35 @@ class MemberContorller with ChangeNotifier {
       });
 
       for (var element in _allMember) {
-        print("the sons for ${element.name}");
         if (element.sons != null) {
           for (var inelement in element.sons) {
             print(inelement);
             MemberModel newSon = getById(inelement);
             newSon.printModel();
             element.allsons.add(newSon);
-            print("added done");
           }
         }
-        print("ended sons now ");
       }
 
       for (var element in _allMember) {
-        print("the parents for ${element.name}");
         if (element.parents != null) {
           for (var inelement in element.parents) {
             print(inelement);
             MemberModel newSon = getById(inelement);
             newSon.printModel();
             element.allparents.add(newSon);
-            print("added done");
           }
         }
-        print("ended parents now ");
       }
       for (var element in _allMember) {
-        print("the couple for ${element.name}");
         if (element.couple != null) {
           for (var inelement in element.couple) {
             print(inelement);
             MemberModel newSon = getById(inelement);
             newSon.printModel();
             element.allcouples.add(newSon);
-            print("added done");
           }
         }
-        print("ended parents now ");
       }
 
       select = _allMember;
@@ -91,7 +83,7 @@ class MemberContorller with ChangeNotifier {
     } catch (e) {}
   }
 
-  getByName(String x) {
+  searchByName(String x) {
     select = [];
     notifyListeners();
     print(select);
@@ -100,6 +92,32 @@ class MemberContorller with ChangeNotifier {
     }
     for (var a in _allMember) {
       if (a.name.startsWith(x)) {
+        select.add(a);
+      }
+    }
+    notifyListeners();
+  }
+
+  searchByCity(String city) {
+    select = [];
+    if (city == "") {
+      select = _allMember;
+    }
+    for (var a in _allMember) {
+      if (a.city.startsWith(city)) {
+        select.add(a);
+      }
+    }
+    notifyListeners();
+  }
+
+  searchByGender(String city) {
+    select = [];
+    if (city == "") {
+      select = _allMember;
+    }
+    for (var a in _allMember) {
+      if (a.gender.startsWith(city)) {
         select.add(a);
       }
     }

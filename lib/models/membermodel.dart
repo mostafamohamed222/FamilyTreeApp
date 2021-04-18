@@ -1,5 +1,5 @@
 class MemberModel {
-  String id, name, image, job, city;
+  String id, name, image, job, city, gender;
   String age;
   int numberOfSons = 2;
   List<dynamic> sons, parents, couple;
@@ -18,6 +18,7 @@ class MemberModel {
     this.image,
     this.job,
     this.age,
+    this.gender,
     this.city,
     this.sons,
     this.parents,

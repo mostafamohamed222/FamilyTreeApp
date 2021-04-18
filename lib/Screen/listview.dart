@@ -31,11 +31,15 @@ class _FamilyListState extends State<FamilyList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Search(),
-        Expanded(
-          child: scrollItem(),
+        Column(
+          children: [
+            Search(),
+            Expanded(
+              child: scrollItem(),
+            ),
+          ],
         ),
       ],
     );
