@@ -1,153 +1,197 @@
-import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:treeapp/Screen/verifiedscreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:otp_screen/otp_screen.dart';
+import 'package:treeapp/Screen/homepage.dart';
 
-class LoginScreen extends StatefulWidget {
+enum MobileVerificationState { SHOW_MOBILE_FORM_STATE, SHOW_OTP_FORM_STATE }
+
+class Login extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool loading = false;
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController _numberTextController = TextEditingController();
+class _LoginState extends State<Login> {
+  MobileVerificationState currentState =
+      MobileVerificationState.SHOW_MOBILE_FORM_STATE;
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String verificationIdd;
+  String phone;
+  bool showLoading = false;
+  void signInWithPhoneAuthCredential(AuthCredential phoneAuthCredential) async {
+    setState(() {
+      showLoading = true;
+    });
+    try {
+      final authCredential =
+          await _auth.signInWithCredential(phoneAuthCredential);
+      print('12456484');
+      setState(() {
+        showLoading = false;
+      });
+      if (authCredential?.user != null) {
+        print('12456484hahahah');
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+    } on FirebaseAuthException catch (e) {
+      print('hahahhaFailed with error code: ${e.code}');
+      print(e.message);
+      setState(() {
+        showLoading = false;
+      });
+      _scaffoldKey.currentState
+          .showSnackBar(new SnackBar(content: Text(e.message)));
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
+  Future<String> validateOtp(String otp) async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    if (otp != null) {
+      print(otp + "dah ely enta ktbto11111");
+      final phoneAuthCredential = PhoneAuthProvider.credential(
+          verificationId: verificationIdd, smsCode: otp.trim());
+      print(otp + "dah ely enta ktbto22222");
+      signInWithPhoneAuthCredential(phoneAuthCredential);
+      print("ebrdenaaaa   " + phoneAuthCredential.toString());
+    } else {
+      print(otp + "dah ely enta ktbto");
+    }
+  }
+
+  Future<void> verifyPhone() async {
+    await _auth.verifyPhoneNumber(
+        phoneNumber: "+2" + phoneController.text,
+        timeout: Duration(seconds: 60),
+        verificationCompleted: (phoneAuthCredential) async {
+          setState(() {
+            final authCredential =
+                _auth.signInWithCredential(phoneAuthCredential);
+            showLoading = false;
+          });
+          signInWithPhoneAuthCredential(phoneAuthCredential);
+        },
+        verificationFailed: (verificationFailed) {
+          setState(() {
+            showLoading = false;
+          });
+          _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(content: Text(verificationFailed.message)));
+        },
+        codeSent: (verificationId, [resendingToken]) async {
+          print(verificationId);
+          setState(() {
+            showLoading = false;
+            this.verificationIdd = verificationId;
+            currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
+          });
+        },
+        codeAutoRetrievalTimeout: (verificationIdd) async {});
+  }
+
+  getMobileFOrmWidget(context) {
+    return Column(
       children: [
-        Container(
-          // alignment: Alignment.topCenter,
-          // child: Image.asset('assets/icon/Logo.png')
-          color: Colors.white.withOpacity(0.5),
-          width: double.infinity,
-          //height: double.infinity,
+        Spacer(),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Image.asset(
+            'assets/2.png',
+            width: 100,
+            height: 90,
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 40.0),
-          child: Container(
-            alignment: Alignment.topRight,
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        // child: Image.asset(
-                        //   'assets/logo.png',
-                        //   fit: BoxFit.cover,
-                        //   width: 100,
-                        //   height: 90,
-                        // ),
-                      ),
-                      Text(
-                        'تسجيل الدخول',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Colors.brown,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(20.0),
-                          color: Colors.white.withOpacity(0.4),
-                          elevation: 0.0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
-                            child: TextFormField(
-                                controller: _numberTextController,
-                                decoration: InputDecoration(
-                                  hintText:
-                                      '                                        التسجيل برقم الهاتف ',
-                                  icon: Icon(Icons.mobile_friendly_sharp),
-                                  border: OutlineInputBorder(),
-                                ),
-                                keyboardType: TextInputType.phone,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'من فضلك أدخل رقم هاتفك ';
-                                  } else {
-                                    if (value.length < 5) {
-                                      return ' من فضلك ادخل رقم صحيح !';
-                                    }
-                                    return null;
-                                  }
-                                }),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(15.0, 35.0, 15.0, 8.0),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.brown,
-                          child: MaterialButton(
-                            onPressed: () {
-                              final String phonenumber =
-                                  _numberTextController.text;
-                              if (_formKey.currentState.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VerificationScreen(
-                                      phone: phonenumber,
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                // Fluttertoast.showToast(
-                                //     msg:
-                                //     " من فضلك ادخل رقم صحيح ",
-                                //     toastLength: Toast.LENGTH_LONG,
-                                //     gravity: ToastGravity.BOTTOM,
-                                //     backgroundColor: Colors.red,
-                                //     textColor: Colors.white,
-                                //     fontSize: 16.0);
-                                print("last line of Isolate");
-                                return null;
-                              }
-                            },
-                            minWidth: MediaQuery.of(context).size.width,
-                            child: Text(
-                              " دخول ",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'تسجيل الدخول',
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              color: Colors.brown,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: phoneController,
+            textAlign: TextAlign.right,
+            keyboardType: TextInputType.phone,
+            decoration: InputDecoration(
+              hintText: 'التسجيل برقم الهاتف ',
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(15.0, 35.0, 15.0, 8.0),
+          child: Material(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.brown,
+            child: MaterialButton(
+              onPressed: () async {
+                setState(() {
+                  showLoading = true;
+                  phone = phoneController.text;
+                });
+                if (FirebaseAuth.instance.currentUser?.uid != null) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                } else {
+                  verifyPhone();
+                }
+              },
+              minWidth: MediaQuery.of(context).size.width,
+              child: Text(
+                " دخول ",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0),
               ),
             ),
           ),
         ),
-        Visibility(
-            visible: loading ?? true,
-            child: Center(
-              child: Container(
-                alignment: Alignment.center,
-                color: Colors.white.withOpacity(0.7),
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                ),
-              ),
-            )),
+        Spacer(),
       ],
-    ));
+    );
+  }
+
+  getOTPFOrmWidget(context) {
+    return OtpScreen(
+      validateOtp: validateOtp,
+      otpLength: 6,
+      titleColor: Colors.brown,
+      themeColor: Colors.brown,
+      title: "التحقق من رقم الهاتف",
+      subTitle: "الرجاء ادخال الكود المرسل الي رقم موبايلك",
+      icon: Icon(
+        Icons.send_to_mobile,
+      ),
+    );
+  }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      body: Container(
+          child: showLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : currentState == MobileVerificationState.SHOW_MOBILE_FORM_STATE
+                  ? getMobileFOrmWidget(context)
+                  : getOTPFOrmWidget(context)),
+    );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:treeapp/Screen/LoginScreen.dart';
+import 'package:treeapp/Screen/aboutapp.dart';
 import 'package:treeapp/Screen/connectwithus.dart';
 
-import 'aboutapp.dart';
+import 'add.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -71,7 +72,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext) => AboutUs(),
+                      builder: (BuildContext) => Login(),
                     ),
                   );
                 },
@@ -92,15 +93,33 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext) => LoginScreen()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext) => Login()));
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
                     "تسجيل الخروج",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext) => Manager()));
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    "اضافة",
                     textAlign: TextAlign.end,
                     style: TextStyle(
                         color: Colors.white,

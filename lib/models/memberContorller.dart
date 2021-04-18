@@ -17,8 +17,78 @@ class MemberContorller with ChangeNotifier {
   String id;
   MemberModel currentModel;
 
-  String url =
-      'https://treeproject-4a712-default-rtdb.firebaseio.com/member.json';
+  var url = Uri.parse(
+      'https://treeproject-4a712-default-rtdb.firebaseio.com/member.json');
+
+  void addmember(
+      {String firstName,
+      String lastName,
+      String fullName,
+      String phone,
+      String email,
+      String city,
+      String address,
+      DateTime date,
+      String gender,
+      int role,
+      bool alive,
+      String parent}) {
+    // print("the name is ${firstName} $lastName  $fullName");
+    // print("the number phone is $phone");
+    // print("the email is $email");
+    // print("the city is $city");
+    // print("the address is $address");
+
+    DateTime now = DateTime.now();
+    // print("the date is ${now.year - date.year}");
+
+    http
+        .post(
+      url,
+      body: json.encode(
+        {
+          "name": "$firstName $lastName $fullName",
+          "job": role == 1 ? "مدير" : "مستخدم",
+          "image":
+              "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
+          "city": city,
+          "address": address,
+          "age": (now.year - date.year).toString(),
+          "phone": phone,
+          "email": email,
+          "alive": alive == true ? "حي" : "ميت",
+          "parent": {"0": parent},
+        },
+      ),
+    )
+        .then((value) {
+      for (var x in _allMember) {
+        if (x.id == parent) {
+          print(x.id);
+          x.sons.add(value);
+          x.allsons = [];
+          if (x.sons != null) {
+            for (var inelement in x.sons) {
+              //print(inelement);
+              MemberModel newSon = getById(inelement);
+              //newSon.printModel();
+              x.allsons.add(newSon);
+            }
+          }
+          _allMember.add(MemberModel(
+              id: value.body,
+              age: (now.year - date.year).toString(),
+              city: city,
+              job: role == 1 ? "مدير" : "مستخدم",
+              name: "$firstName $lastName $fullName",
+              parents: [parent],
+              image:
+                  "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612"));
+        }
+      }
+    });
+    getMembersData();
+  }
 
   Future<void> getMembersData() async {
     _isGetMemberLoading = true;
@@ -47,9 +117,9 @@ class MemberContorller with ChangeNotifier {
       for (var element in _allMember) {
         if (element.sons != null) {
           for (var inelement in element.sons) {
-            print(inelement);
+            //print(inelement);
             MemberModel newSon = getById(inelement);
-            newSon.printModel();
+            //newSon.printModel();
             element.allsons.add(newSon);
           }
         }
@@ -58,9 +128,9 @@ class MemberContorller with ChangeNotifier {
       for (var element in _allMember) {
         if (element.parents != null) {
           for (var inelement in element.parents) {
-            print(inelement);
+            //print(inelement);
             MemberModel newSon = getById(inelement);
-            newSon.printModel();
+            //newSon.printModel();
             element.allparents.add(newSon);
           }
         }
@@ -68,16 +138,16 @@ class MemberContorller with ChangeNotifier {
       for (var element in _allMember) {
         if (element.couple != null) {
           for (var inelement in element.couple) {
-            print(inelement);
+            //print(inelement);
             MemberModel newSon = getById(inelement);
-            newSon.printModel();
+            //newSon.printModel();
             element.allcouples.add(newSon);
           }
         }
       }
 
       select = _allMember;
-      print(select);
+      //print(select);
       _isGetMemberLoading = false;
       notifyListeners();
     } catch (e) {}

@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
           ),
           backgroundColor: Colors.white,
           title: TabBar(
+            isScrollable: true,
             indicatorColor: Colors.yellow,
             indicatorWeight: 5.0,
             tabs: ch.map((e) {
