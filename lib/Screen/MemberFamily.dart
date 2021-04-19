@@ -8,20 +8,38 @@ import 'package:treeapp/widget/card.dart';
 class MemberSons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<MemberContorller>(context).currentModel.sons);
+
     return Expanded(
-      child: Provider.of<MemberContorller>(context)
-                  .currentModel
-                  .allsons
-                  .length ==
-              0
-          ? Center(child: Text("no sons"))
+      child: Provider.of<MemberContorller>(context).currentModel.sons.length ==
+              1
+          ? Center(
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Manager(
+                        type: "1",
+                      ),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Text("اضافة ابن"),
+              ),
+            )
           : Column(
               children: [
                 InkWell(
                   onTap: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Manager()),
+                      MaterialPageRoute(
+                        builder: (context) => Manager(
+                          type: "1",
+                        ),
+                      ),
                       (Route<dynamic> route) => false,
                     );
                   },
@@ -34,8 +52,7 @@ class MemberSons extends StatelessWidget {
                           Provider.of<MemberContorller>(context).retMemberById(
                               Provider.of<MemberContorller>(context)
                                   .currentModel
-                                  .sons[index]);
-                      print(newMember);
+                                  .sons[index + 1]);
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 5),
                         height: MediaQuery.of(context).size.height * .12,
@@ -44,31 +61,32 @@ class MemberSons extends StatelessWidget {
                           city: Provider.of<MemberContorller>(context,
                                   listen: false)
                               .currentModel
-                              .allsons[index]
+                              .allsons[index + 1]
                               .city,
                           image: Provider.of<MemberContorller>(context,
                                   listen: false)
                               .currentModel
-                              .allsons[index]
+                              .allsons[index + 1]
                               .image,
                           job: Provider.of<MemberContorller>(context,
                                   listen: false)
                               .currentModel
-                              .allsons[index]
+                              .allsons[index + 1]
                               .job,
                           name: Provider.of<MemberContorller>(context,
                                   listen: false)
                               .currentModel
-                              .allsons[index]
+                              .allsons[index + 1]
                               .name,
                         ),
                       );
                     },
                     itemCount:
                         Provider.of<MemberContorller>(context, listen: false)
-                            .currentModel
-                            .allsons
-                            .length,
+                                .currentModel
+                                .sons
+                                .length -
+                            1,
                   ),
                 ),
               ],

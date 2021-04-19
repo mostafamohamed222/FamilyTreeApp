@@ -16,10 +16,27 @@ class MemberContorller with ChangeNotifier {
 
   String id;
   MemberModel currentModel;
+  Future<void> update(String id) async {
+    var url = Uri.parse(
+        'https://treeproject-4a712-default-rtdb.firebaseio.com/member/$id.json');
+
+    MemberModel newMember = getById(id);
+
+    await http.patch(url,
+        body: json.encode({
+          "name": newMember.name,
+          "job": newMember.job,
+          "image": newMember.image,
+          "city": newMember.city,
+          "age": newMember.age,
+          "parent": newMember.parents,
+          "son": newMember.sons,
+          "couple": newMember.couple,
+        }));
+  }
 
   var url = Uri.parse(
       'https://treeproject-4a712-default-rtdb.firebaseio.com/member.json');
-
   void addmember(
       {String firstName,
       String lastName,
@@ -31,54 +48,137 @@ class MemberContorller with ChangeNotifier {
       String gender,
       int role,
       bool alive,
-      String parent}) {
+      String parent,
+      String type}) {
     DateTime now = DateTime.now();
 
-    http
-        .post(
-      url,
-      body: json.encode(
-        {
-          "name": "$firstName $lastName ",
-          "job": role == 1 ? "مدير" : "مستخدم",
-          "image":
-              "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
-          "city": city,
-          "address": address,
-          "age": (now.year - date.year).toString(),
-          "phone": phone,
-          "email": email,
-          "alive": alive == true ? "حي" : "ميت",
-          "parent": {"0": parent},
-        },
-      ),
-    )
-        .then((value) {
-      _allMember.add(
-        MemberModel(
-            id: value.body,
+    if (type == "1") {
+      http
+          .post(
+        url,
+        body: json.encode(
+          {
+            "name": "$firstName $lastName ",
+            "job": role == 1 ? "مدير" : "مستخدم",
+            "image":
+                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
+            "city": city,
+            "address": address,
+            "age": (now.year - date.year).toString(),
+            "phone": phone,
+            "email": email,
+            "alive": alive == true ? "حي" : "ميت",
+            "parent": [parent, parent],
+            "son": [parent],
+            "couple": [parent],
+          },
+        ),
+      )
+          .then((value) {
+        MemberModel newMember = MemberModel(
+            id: json.decode(value.body)['name'],
+            age: (now.year - date.year).toString(),
+            city: city,
+            job: role == 1 ? "مدير" : "مستخدم",
+            name: "$firstName $lastName ",
+            parents: [parent, parent],
+            couple: [parent],
+            sons: [parent],
+            image:
+                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612");
+
+        if (newMember.parents != null) {
+          for (var inelement in newMember.parents) {
+            MemberModel newSon = getById(inelement);
+            newMember.allparents.add(newSon);
+          }
+        }
+
+        _allMember.add(newMember);
+
+        for (var x in _allMember) {
+          if (x.id == parent) {
+            print(json.decode(value.body)['name']);
+            x.sons.add(json.decode(value.body)['name']);
+            x.allsons = [];
+            if (x.sons != null) {
+              for (var inelement in x.sons) {
+                MemberModel newSon = getById(inelement);
+                x.allsons.add(newSon);
+              }
+            }
+            update(parent);
+            notifyListeners();
+          }
+        }
+      });
+    } else {
+      http
+          .post(
+        url,
+        body: json.encode(
+          {
+            "name": "$firstName $lastName ",
+            "job": role == 1 ? "مدير" : "مستخدم",
+            "image":
+                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
+            "city": city,
+            "address": address,
+            "age": (now.year - date.year).toString(),
+            "phone": phone,
+            "email": email,
+            "alive": alive == true ? "حي" : "ميت",
+            "parent": [parent],
+            "son": [parent],
+            "couple": [parent, parent],
+          },
+        ),
+      )
+          .then((value) {
+        print("we added member");
+        MemberModel newMember = MemberModel(
+            id: json.decode(value.body)['name'],
             age: (now.year - date.year).toString(),
             city: city,
             job: role == 1 ? "مدير" : "مستخدم",
             name: "$firstName $lastName ",
             parents: [parent],
+            couple: [parent, parent],
+            sons: [parent],
             image:
-                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612"),
-      );
-      for (var x in _allMember) {
-        if (x.id == parent) {
-          x.sons.add(value.body);
-          x.allsons = [];
-          if (x.sons != null) {
-            for (var inelement in x.sons) {
-              MemberModel newSon = getById(inelement);
-              x.allsons.add(newSon);
-            }
+                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612");
+
+        if (newMember.couple != null) {
+          for (var inelement in newMember.couple) {
+            //print(inelement);
+            MemberModel newSon = getById(inelement);
+            //newSon.printModel();
+            newMember.allcouples.add(newSon);
           }
-          notifyListeners();
         }
-      }
-    });
+
+        _allMember.add(newMember);
+
+        for (var x in _allMember) {
+          if (x.id == parent) {
+            print("we find father");
+            print(x.name);
+            print(json.decode(value.body)['name']);
+            x.couple.add(json.decode(value.body)['name']);
+            print("we added son");
+            x.allcouples = [];
+            if (x.couple != null) {
+              for (var inelement in x.couple) {
+                MemberModel newSon = getById(inelement);
+                x.allcouples.add(newSon);
+              }
+            }
+            update(parent);
+            notifyListeners();
+          }
+        }
+      });
+    }
   }
 
   Future<void> getMembersData() async {
@@ -100,6 +200,7 @@ class MemberContorller with ChangeNotifier {
           parents: value['parent'],
           couple: value['couple'],
         );
+        _newMeal.printModel();
         _allMember.add(_newMeal);
       });
 

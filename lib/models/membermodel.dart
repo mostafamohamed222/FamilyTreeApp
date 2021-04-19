@@ -1,7 +1,6 @@
 class MemberModel {
   String id, name, image, job, city, gender, phone;
   String age;
-  int numberOfSons = 2;
   List<dynamic> sons, parents, couple;
   List<dynamic> allsons = [];
   List<dynamic> allparents = [];

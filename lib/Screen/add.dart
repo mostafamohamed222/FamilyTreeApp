@@ -8,9 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/homepage.dart';
 import 'package:treeapp/models/memberContorller.dart';
-import 'package:provider/provider.dart';
 
 class Manager extends StatefulWidget {
+  String type;
+  Manager({this.type});
   @override
   _ManagerState createState() => _ManagerState();
 }
@@ -196,8 +197,10 @@ class _ManagerState extends State<Manager> {
 
   @override
   Widget build(BuildContext context) {
-    _lastNameTextController.text =
-        Provider.of<MemberContorller>(context).currentModel.name;
+    if (widget.type == "1") {
+      _lastNameTextController.text =
+          Provider.of<MemberContorller>(context).currentModel.name;
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -370,6 +373,7 @@ class _ManagerState extends State<Manager> {
                                 Provider.of<MemberContorller>(context,
                                         listen: false)
                                     .addmember(
+                                  type: widget.type,
                                   address: _addressTextController.text,
                                   city: _cityTextController.text,
                                   date: birthDate,

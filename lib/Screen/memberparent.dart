@@ -7,19 +7,20 @@ import 'package:treeapp/widget/card.dart';
 class MemberParents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<MemberContorller>(context).currentModel.parents);
     return Expanded(
       child: Provider.of<MemberContorller>(context)
                   .currentModel
-                  .allparents
+                  .parents
                   .length ==
-              0
+              1
           ? Center(child: Text("no parents"))
           : ListView.builder(
               itemBuilder: (BuildContext, index) {
                 MemberModel newMember = Provider.of<MemberContorller>(context)
                     .retMemberById(Provider.of<MemberContorller>(context)
                         .currentModel
-                        .parents[index]);
+                        .parents[index + 1]);
                 print(newMember);
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 5),
@@ -28,27 +29,28 @@ class MemberParents extends StatelessWidget {
                     age: "1",
                     city: Provider.of<MemberContorller>(context, listen: false)
                         .currentModel
-                        .allparents[index]
+                        .allparents[index + 1]
                         .city,
                     image: Provider.of<MemberContorller>(context, listen: false)
                         .currentModel
-                        .allparents[index]
+                        .allparents[index + 1]
                         .image,
                     job: Provider.of<MemberContorller>(context, listen: false)
                         .currentModel
-                        .allparents[index]
+                        .allparents[index + 1]
                         .job,
                     name: Provider.of<MemberContorller>(context, listen: false)
                         .currentModel
-                        .allparents[index]
+                        .allparents[index + 1]
                         .name,
                   ),
                 );
               },
               itemCount: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .allparents
-                  .length,
+                      .currentModel
+                      .parents
+                      .length -
+                  1,
             ),
     );
   }
