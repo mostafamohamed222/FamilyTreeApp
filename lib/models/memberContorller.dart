@@ -251,7 +251,7 @@ class MemberContorller with ChangeNotifier {
       select = _allMember;
     }
     for (var a in _allMember) {
-      if (a.name.startsWith(x)) {
+      if (a.name.contains(x)) {
         select.add(a);
       }
     }

@@ -31,11 +31,18 @@ class _GraphViewPageState extends State<GraphViewPage> {
       print("this is sons for ${x.nodeNumber}");
       print("this is sons for ${x.id}");
 
-      for (var i in x.allsons) {
-        print(i.id);
-        print(i.nodeNumber);
-        graph.addEdge(nodes[x.nodeNumber], nodes[i.nodeNumber]);
+      for (int i = 1; i < x.allsons.length; i++) {
+        var v = x.allsons[i];
+        print(v.id);
+        print(v.nodeNumber);
+        graph.addEdge(nodes[x.nodeNumber], nodes[v.nodeNumber]);
       }
+
+      // for (var i in x.allsons) {
+      //   print(i.id);
+      //   print(i.nodeNumber);
+      //   graph.addEdge(nodes[x.nodeNumber], nodes[i.nodeNumber]);
+      // }
     }
     return Scaffold(
         body: SafeArea(
@@ -115,12 +122,12 @@ class _GraphViewPageState extends State<GraphViewPage> {
       ),
     );
   }
+
   final Graph graph = Graph();
   BuchheimWalkerConfiguration builder = BuchheimWalkerConfiguration();
 
   @override
   void initState() {
-  
     builder
       ..siblingSeparation = (65)
       ..levelSeparation = (100)
