@@ -23,7 +23,6 @@ class MemberContorller with ChangeNotifier {
   void addmember(
       {String firstName,
       String lastName,
-      String fullName,
       String phone,
       String email,
       String city,
@@ -33,21 +32,14 @@ class MemberContorller with ChangeNotifier {
       int role,
       bool alive,
       String parent}) {
-    // print("the name is ${firstName} $lastName  $fullName");
-    // print("the number phone is $phone");
-    // print("the email is $email");
-    // print("the city is $city");
-    // print("the address is $address");
-
     DateTime now = DateTime.now();
-    // print("the date is ${now.year - date.year}");
 
     http
         .post(
       url,
       body: json.encode(
         {
-          "name": "$firstName $lastName $fullName",
+          "name": "$firstName $lastName ",
           "job": role == 1 ? "مدير" : "مستخدم",
           "image":
               "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
@@ -62,32 +54,31 @@ class MemberContorller with ChangeNotifier {
       ),
     )
         .then((value) {
+      _allMember.add(
+        MemberModel(
+            id: value.body,
+            age: (now.year - date.year).toString(),
+            city: city,
+            job: role == 1 ? "مدير" : "مستخدم",
+            name: "$firstName $lastName ",
+            parents: [parent],
+            image:
+                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612"),
+      );
       for (var x in _allMember) {
         if (x.id == parent) {
-          print(x.id);
-          x.sons.add(value);
+          x.sons.add(value.body);
           x.allsons = [];
           if (x.sons != null) {
             for (var inelement in x.sons) {
-              //print(inelement);
               MemberModel newSon = getById(inelement);
-              //newSon.printModel();
               x.allsons.add(newSon);
             }
           }
-          _allMember.add(MemberModel(
-              id: value.body,
-              age: (now.year - date.year).toString(),
-              city: city,
-              job: role == 1 ? "مدير" : "مستخدم",
-              name: "$firstName $lastName $fullName",
-              parents: [parent],
-              image:
-                  "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612"));
+          notifyListeners();
         }
       }
     });
-    getMembersData();
   }
 
   Future<void> getMembersData() async {
@@ -95,9 +86,7 @@ class MemberContorller with ChangeNotifier {
     notifyListeners();
     try {
       http.Response res = await http.get(url);
-
       final data = json.decode(res.body) as Map<String, dynamic>;
-
       data.forEach((key, value) {
         final MemberModel _newMeal = MemberModel(
           id: key,
