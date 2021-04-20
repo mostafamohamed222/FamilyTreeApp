@@ -7,7 +7,7 @@ import 'package:treeapp/widget/card.dart';
 class MemberSons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<MemberContorller>(context).userType);
+    print(Provider.of<MemberContorller>(context).userNumber);
 
     return Expanded(
       child: Provider.of<MemberContorller>(context).currentModel.sons.length ==
@@ -19,19 +19,28 @@ class MemberSons extends StatelessWidget {
                   ? Center(
                       child: Text("لا يوجد ابناء"),
                     )
-                  : InkWell(
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Manager(
-                              type: "1",
-                            ),
+                  : Wrap(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FloatingActionButton.extended(
+                            onPressed: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Manager(
+                                    type: "1",
+                                  ),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            },
+                            label: const Text('اضافة ابن'),
+                            icon: const Icon(Icons.add),
+                            backgroundColor: Colors.pink,
                           ),
-                          (Route<dynamic> route) => false,
-                        );
-                      },
-                      child: Text("اضافة ابن"),
+                        ),
+                      ],
                     ),
             )
           : Column(
@@ -42,19 +51,28 @@ class MemberSons extends StatelessWidget {
                     ? Center(
                         child: Text(""),
                       )
-                    : InkWell(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Manager(
-                                type: "1",
-                              ),
+                    : Wrap(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FloatingActionButton.extended(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Manager(
+                                      type: "1",
+                                    ),
+                                  ),
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                              label: const Text('اضافة ابن'),
+                              icon: const Icon(Icons.add),
+                              backgroundColor: Colors.pink,
                             ),
-                            (Route<dynamic> route) => false,
-                          );
-                        },
-                        child: Text("اضافة ابن"),
+                          ),
+                        ],
                       ),
                 Expanded(
                   child: ListView.builder(

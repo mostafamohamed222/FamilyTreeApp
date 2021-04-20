@@ -10,7 +10,6 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
     // TODO: implement initState
@@ -39,15 +38,15 @@ class _SplashState extends State<Splash> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: 50.0,
-                        backgroundColor: Colors.brown,
-                        child: Image.asset(
-                          'assets/2.png',
-                          width: 100,
-                          height: 90,
-                        ),
-                      )
+                      // CircleAvatar(
+                      //   radius: 50.0,
+                      //   backgroundColor: Colors.brown,
+                      //   child: Image.asset(
+                      //     'assets/2.png',
+                      //     width: 100,
+                      //     height: 90,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -77,18 +76,18 @@ class _InitializerState extends State<Initializer> {
   FirebaseAuth _auth;
   User _user;
   bool isLoading = false;
-
   @override
-  void select() async {
+  void initState() {
     // TODO: implement initState
+    super.initState();
     _auth = FirebaseAuth.instance;
-    this._user = await _auth.currentUser;
+    this._user = _auth.currentUser;
     isLoading = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    select();
+    // select();
     return isLoading
         ? Scaffold(
             body: Center(

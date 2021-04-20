@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget {
       create: (_) => MemberContorller(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: HomePage(
+          phone: "01151536008",
+        ),
       ),
     );
   }

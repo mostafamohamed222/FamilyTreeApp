@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:treeapp/models/memberContorller.dart';
 import 'package:treeapp/models/membermodel.dart';
 import 'package:zoom_widget/zoom_widget.dart';
-import 'package:provider/provider.dart';
 
 import 'member.dart';
 

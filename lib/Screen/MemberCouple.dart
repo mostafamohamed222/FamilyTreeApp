@@ -19,19 +19,28 @@ class MemberCouple extends StatelessWidget {
                       ? Center(
                           child: Text("لا يوجد ازواج"),
                         )
-                      : InkWell(
-                          onTap: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Manager(
-                                  type: "2",
-                                ),
+                      : Wrap(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: FloatingActionButton.extended(
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Manager(
+                                        type: "2",
+                                      ),
+                                    ),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                },
+                                label: const Text('اضافة زوج/زوجة'),
+                                icon: const Icon(Icons.add),
+                                backgroundColor: Colors.pink,
                               ),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
-                          child: Text("اضافة زوج/زوجة"),
+                            ),
+                          ],
                         ),
                 )
               : Column(
@@ -42,19 +51,28 @@ class MemberCouple extends StatelessWidget {
                         ? Center(
                             child: Text(""),
                           )
-                        : InkWell(
-                            onTap: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Manager(
-                                    type: "2",
-                                  ),
+                        : Wrap(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: FloatingActionButton.extended(
+                                  onPressed: () {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Manager(
+                                          type: "2",
+                                        ),
+                                      ),
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  },
+                                  label: const Text('اضافة زوج/زوجة'),
+                                  icon: const Icon(Icons.add),
+                                  backgroundColor: Colors.pink,
                                 ),
-                                (Route<dynamic> route) => false,
-                              );
-                            },
-                            child: Text("اضافة زوج/زوجة"),
+                              ),
+                            ],
                           ),
                     Expanded(
                       child: ListView.builder(

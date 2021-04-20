@@ -17,27 +17,64 @@ class MemberContorller with ChangeNotifier {
   bool _stakCon = false;
   bool get stakcon => _stakCon;
 
+  bool _stakCon2 = false;
+  bool get stakcon2 => _stakCon2;
+
   String userType;
   String userNumber;
+  MemberModel user;
 
   void setType() {
     for (var x in _allMember) {
-      print(x.phone);
-      print(userNumber);
       if (x.phone == userNumber) {
         userType = x.type;
-        print("we find it");
-        print(userType);
+        user = x;
         notifyListeners();
         return;
       }
     }
     userType = "مستخدم";
+    user = _allMember[1];
     notifyListeners();
   }
 
   void changeStak() {
     _stakCon = !_stakCon;
+    _stakCon2 = false;
+    notifyListeners();
+  }
+
+  void changeStak2() {
+    _stakCon2 = !_stakCon2;
+    _stakCon = false;
+    notifyListeners();
+  }
+
+  void sortByName() {
+    select.sort((a, b) {
+      return a.name
+          .toString()
+          .toLowerCase()
+          .compareTo(b.name.toString().toLowerCase());
+    });
+
+    notifyListeners();
+  }
+
+  void sortByAge() {
+    select.sort((a, b) {
+      return a.age.compareTo(b.age);
+    });
+
+    notifyListeners();
+  }
+
+  void rev() {
+    var r = select;
+    select = [];
+    for (int i = r.length - 1; i >= 0; i--) {
+      select.add(r[i]);
+    }
     notifyListeners();
   }
 
@@ -110,12 +147,12 @@ class MemberContorller with ChangeNotifier {
         MemberModel newMember = MemberModel(
             gender: gender,
             phone: phone,
-            type: type,
+            type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
             age: (now.year - date.year).toString(),
             city: city,
-            job: role == 1 ? "مدير" : "مستخدم",
+            job: job,
             name: "$firstName $lastName ",
             parents: [parent, parent],
             couple: [parent],
@@ -173,14 +210,14 @@ class MemberContorller with ChangeNotifier {
       )
           .then((value) {
         MemberModel newMember = MemberModel(
-            type: type,
+            type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
             age: (now.year - date.year).toString(),
             city: city,
             gender: gender,
             phone: phone,
-            job: role == 1 ? "مدير" : "مستخدم",
+            job: job,
             name: "$firstName $lastName ",
             parents: [parent],
             couple: [parent, parent],
