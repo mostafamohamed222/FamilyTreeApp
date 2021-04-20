@@ -96,15 +96,22 @@ class _SearchState extends State<Search> {
             ),
           )
         ],
-        leading: Icon(
-          Icons.filter_list_alt,
-          color: Colors.white,
-          size: 28,
+        leading: InkWell(
+          child: Icon(
+            Icons.filter_list_alt,
+            color: Colors.white,
+            size: 28,
+          ),
         ),
-        title: Icon(
-          Icons.swap_vert,
-          color: Colors.white,
-          size: 28,
+        title: InkWell(
+          onTap: () {
+            Provider.of<MemberContorller>(context, listen: false).changeStak();
+          },
+          child: Icon(
+            Icons.swap_vert,
+            color: Colors.white,
+            size: 35,
+          ),
         ),
         trailing: Container(
           margin: EdgeInsets.all(10),

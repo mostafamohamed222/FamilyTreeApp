@@ -17,11 +17,6 @@ class MemberParents extends StatelessWidget {
           ? Center(child: Text("no parents"))
           : ListView.builder(
               itemBuilder: (BuildContext, index) {
-                MemberModel newMember = Provider.of<MemberContorller>(context)
-                    .retMemberById(Provider.of<MemberContorller>(context)
-                        .currentModel
-                        .parents[index + 1]);
-                print(newMember);
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 5),
                   height: MediaQuery.of(context).size.height * .12,
@@ -43,6 +38,10 @@ class MemberParents extends StatelessWidget {
                         .currentModel
                         .allparents[index + 1]
                         .name,
+                    id: Provider.of<MemberContorller>(context, listen: false)
+                        .currentModel
+                        .allparents[index + 1]
+                        .id,
                   ),
                 );
               },

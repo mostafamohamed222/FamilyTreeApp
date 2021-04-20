@@ -14,6 +14,14 @@ class MemberContorller with ChangeNotifier {
 
   List<MemberModel> select = [];
 
+  bool _stakCon = false;
+  bool get stakcon => _stakCon;
+
+  void changeStak() {
+    _stakCon = !_stakCon;
+    notifyListeners();
+  }
+
   String id;
   MemberModel currentModel;
   Future<void> update(String id) async {
@@ -249,6 +257,8 @@ class MemberContorller with ChangeNotifier {
     print(select);
     if (x == "") {
       select = _allMember;
+      notifyListeners();
+      return;
     }
     for (var a in _allMember) {
       if (a.name.contains(x)) {

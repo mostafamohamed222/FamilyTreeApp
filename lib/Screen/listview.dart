@@ -41,6 +41,16 @@ class _FamilyListState extends State<FamilyList> {
             ),
           ],
         ),
+        Container(
+          margin: EdgeInsets.only(top: 50),
+          width: MediaQuery.of(context).size.width,
+          height: Provider.of<MemberContorller>(context).stakcon == true
+              ? MediaQuery.of(context).size.width
+              : 0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+        ),
       ],
     );
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/add.dart';
 import 'package:treeapp/models/memberContorller.dart';
-import 'package:treeapp/models/membermodel.dart';
 import 'package:treeapp/widget/card.dart';
 
 class MemberCouple extends StatelessWidget {
@@ -73,6 +72,11 @@ class MemberCouple extends StatelessWidget {
                                   .currentModel
                                   .allcouples[index + 1]
                                   .name,
+                              id: Provider.of<MemberContorller>(context,
+                                      listen: false)
+                                  .currentModel
+                                  .allcouples[index + 1]
+                                  .id,
                             ),
                           );
                         },

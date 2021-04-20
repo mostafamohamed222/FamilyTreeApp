@@ -48,11 +48,6 @@ class MemberSons extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: (BuildContext, index) {
-                      MemberModel newMember =
-                          Provider.of<MemberContorller>(context).retMemberById(
-                              Provider.of<MemberContorller>(context)
-                                  .currentModel
-                                  .sons[index + 1]);
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 5),
                         height: MediaQuery.of(context).size.height * .12,
@@ -78,6 +73,11 @@ class MemberSons extends StatelessWidget {
                               .currentModel
                               .allsons[index + 1]
                               .name,
+                          id: Provider.of<MemberContorller>(context,
+                                  listen: false)
+                              .currentModel
+                              .allsons[index + 1]
+                              .id,
                         ),
                       );
                     },
