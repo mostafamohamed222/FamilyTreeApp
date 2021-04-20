@@ -17,6 +17,25 @@ class MemberContorller with ChangeNotifier {
   bool _stakCon = false;
   bool get stakcon => _stakCon;
 
+  String userType;
+  String userNumber;
+
+  void setType() {
+    for (var x in _allMember) {
+      print(x.phone);
+      print(userNumber);
+      if (x.phone == userNumber) {
+        userType = x.type;
+        print("we find it");
+        print(userType);
+        notifyListeners();
+        return;
+      }
+    }
+    userType = "مستخدم";
+    notifyListeners();
+  }
+
   void changeStak() {
     _stakCon = !_stakCon;
     notifyListeners();
@@ -40,6 +59,7 @@ class MemberContorller with ChangeNotifier {
           "parent": newMember.parents,
           "son": newMember.sons,
           "couple": newMember.couple,
+          "alive": newMember.alive,
         }));
   }
 
@@ -57,25 +77,29 @@ class MemberContorller with ChangeNotifier {
       int role,
       bool alive,
       String parent,
-      String type}) {
+      String type,
+      String job}) {
     DateTime now = DateTime.now();
 
     if (type == "1") {
+      print(alive);
       http
           .post(
         url,
         body: json.encode(
           {
             "name": "$firstName $lastName ",
-            "job": role == 1 ? "مدير" : "مستخدم",
+            "type": role == 1 ? "مدير" : "مستخدم",
+            "job": job,
             "image":
                 "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
             "city": city,
             "address": address,
+            "gender": gender,
             "age": (now.year - date.year).toString(),
             "phone": phone,
             "email": email,
-            "alive": alive == true ? "حي" : "ميت",
+            "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent, parent],
             "son": [parent],
             "couple": [parent],
@@ -84,6 +108,10 @@ class MemberContorller with ChangeNotifier {
       )
           .then((value) {
         MemberModel newMember = MemberModel(
+            gender: gender,
+            phone: phone,
+            type: type,
+            alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
             age: (now.year - date.year).toString(),
             city: city,
@@ -106,7 +134,6 @@ class MemberContorller with ChangeNotifier {
 
         for (var x in _allMember) {
           if (x.id == parent) {
-            print(json.decode(value.body)['name']);
             x.sons.add(json.decode(value.body)['name']);
             x.allsons = [];
             if (x.sons != null) {
@@ -127,15 +154,17 @@ class MemberContorller with ChangeNotifier {
         body: json.encode(
           {
             "name": "$firstName $lastName ",
-            "job": role == 1 ? "مدير" : "مستخدم",
+            "type": role == 1 ? "مدير" : "مستخدم",
+            "job": job,
             "image":
                 "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
             "city": city,
             "address": address,
+            "gender": gender,
             "age": (now.year - date.year).toString(),
             "phone": phone,
             "email": email,
-            "alive": alive == true ? "حي" : "ميت",
+            "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent],
             "son": [parent],
             "couple": [parent, parent],
@@ -143,11 +172,14 @@ class MemberContorller with ChangeNotifier {
         ),
       )
           .then((value) {
-        print("we added member");
         MemberModel newMember = MemberModel(
+            type: type,
+            alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
             age: (now.year - date.year).toString(),
             city: city,
+            gender: gender,
+            phone: phone,
             job: role == 1 ? "مدير" : "مستخدم",
             name: "$firstName $lastName ",
             parents: [parent],
@@ -158,9 +190,7 @@ class MemberContorller with ChangeNotifier {
 
         if (newMember.couple != null) {
           for (var inelement in newMember.couple) {
-            //print(inelement);
             MemberModel newSon = getById(inelement);
-            //newSon.printModel();
             newMember.allcouples.add(newSon);
           }
         }
@@ -169,11 +199,7 @@ class MemberContorller with ChangeNotifier {
 
         for (var x in _allMember) {
           if (x.id == parent) {
-            print("we find father");
-            print(x.name);
-            print(json.decode(value.body)['name']);
             x.couple.add(json.decode(value.body)['name']);
-            print("we added son");
             x.allcouples = [];
             if (x.couple != null) {
               for (var inelement in x.couple) {
@@ -198,7 +224,9 @@ class MemberContorller with ChangeNotifier {
       data.forEach((key, value) {
         final MemberModel _newMeal = MemberModel(
           id: key,
+          type: value['type'],
           image: value['image'],
+          alive: value['alive'],
           name: value['name'],
           age: value['age'],
           city: value['city'],
@@ -207,17 +235,15 @@ class MemberContorller with ChangeNotifier {
           sons: value['son'],
           parents: value['parent'],
           couple: value['couple'],
+          phone: value['phone'],
         );
-        _newMeal.printModel();
         _allMember.add(_newMeal);
       });
 
       for (var element in _allMember) {
         if (element.sons != null) {
           for (var inelement in element.sons) {
-            //print(inelement);
             MemberModel newSon = getById(inelement);
-            //newSon.printModel();
             element.allsons.add(newSon);
           }
         }
@@ -226,9 +252,7 @@ class MemberContorller with ChangeNotifier {
       for (var element in _allMember) {
         if (element.parents != null) {
           for (var inelement in element.parents) {
-            //print(inelement);
             MemberModel newSon = getById(inelement);
-            //newSon.printModel();
             element.allparents.add(newSon);
           }
         }
@@ -236,16 +260,13 @@ class MemberContorller with ChangeNotifier {
       for (var element in _allMember) {
         if (element.couple != null) {
           for (var inelement in element.couple) {
-            //print(inelement);
             MemberModel newSon = getById(inelement);
-            //newSon.printModel();
             element.allcouples.add(newSon);
           }
         }
       }
 
       select = _allMember;
-      //print(select);
       _isGetMemberLoading = false;
       notifyListeners();
     } catch (e) {}
@@ -254,7 +275,6 @@ class MemberContorller with ChangeNotifier {
   searchByName(String x) {
     select = [];
     notifyListeners();
-    print(select);
     if (x == "") {
       select = _allMember;
       notifyListeners();
@@ -307,7 +327,6 @@ class MemberContorller with ChangeNotifier {
     _allMember.forEach((element) {
       if (element.id.startsWith(id)) {
         print(element.id.startsWith(id));
-
         return element;
       }
     });

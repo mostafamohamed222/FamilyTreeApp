@@ -56,6 +56,7 @@ class _FamilyListState extends State<FamilyList> {
   }
 
   scrollItem() {
+    Provider.of<MemberContorller>(context, listen: false).setType();
     return Builder(
       builder: (BuildContext) {
         if (Provider.of<MemberContorller>(context).isGetMemberLoading) {

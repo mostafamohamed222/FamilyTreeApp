@@ -15,18 +15,6 @@ class Details extends StatelessWidget {
       child: ListView(
         children: [
           filed(
-              filedTiltle: "اسم المستخدم",
-              name: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .name),
-          Container(
-            child: Divider(
-              indent: 25,
-              endIndent: 25,
-              color: Colors.black,
-            ),
-          ),
-          filed(
               filedTiltle: "المهنة",
               name: Provider.of<MemberContorller>(context, listen: false)
                   .currentModel
@@ -40,16 +28,57 @@ class Details extends StatelessWidget {
           ),
           filed(
               filedTiltle: "العمر ",
-              name: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .age),
+              name: "(" +
+                  Provider.of<MemberContorller>(context, listen: false)
+                      .currentModel
+                      .alive +
+                  ")      " +
+                  Provider.of<MemberContorller>(context, listen: false)
+                      .currentModel
+                      .age),
           Container(
             child: Divider(
               indent: 25,
               endIndent: 25,
               color: Colors.black,
             ),
-          )
+          ),
+          filed(
+              filedTiltle: "المدينة",
+              name: Provider.of<MemberContorller>(context, listen: false)
+                  .currentModel
+                  .city),
+          Container(
+            child: Divider(
+              indent: 25,
+              endIndent: 25,
+              color: Colors.black,
+            ),
+          ),
+          filed(
+              filedTiltle: "رقم الهاتف",
+              name: Provider.of<MemberContorller>(context, listen: false)
+                  .currentModel
+                  .phone),
+          Container(
+            child: Divider(
+              indent: 25,
+              endIndent: 25,
+              color: Colors.black,
+            ),
+          ),
+          filed(
+              filedTiltle: "النوع",
+              name: Provider.of<MemberContorller>(context, listen: false)
+                  .currentModel
+                  .gender),
+          Container(
+            child: Divider(
+              indent: 25,
+              endIndent: 25,
+              color: Colors.black,
+            ),
+          ),
         ],
       ),
     );

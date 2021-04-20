@@ -26,6 +26,7 @@ class _ManagerState extends State<Manager> {
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _cityTextController = TextEditingController();
   TextEditingController _addressTextController = TextEditingController();
+  TextEditingController _jobTextController = TextEditingController();
 
   //select gender method
   List gender = ["ذكر", "انثي"];
@@ -273,6 +274,11 @@ class _ManagerState extends State<Manager> {
                         cont: _lastNameTextController,
                       ),
                       filed(
+                        hintText: "الوظيقة",
+                        validatorMass: "من فضلك ادخل الوظفية",
+                        cont: _jobTextController,
+                      ),
+                      filed(
                         hintText: "رقم الهاتف ",
                         validatorMass: "من فضلك ادخل   رقم الهاتف",
                         cont: _numberTextController,
@@ -373,6 +379,10 @@ class _ManagerState extends State<Manager> {
                                 Provider.of<MemberContorller>(context,
                                         listen: false)
                                     .addmember(
+                                  job: _jobTextController.text,
+                                  alive: alive,
+                                  gender: genderr,
+                                  role: clientORmanager,
                                   type: widget.type,
                                   address: _addressTextController.text,
                                   city: _cityTextController.text,

@@ -14,6 +14,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<MemberContorller>(context, listen: false).userNumber =
+        "01151536008";
     return DefaultTabController(
       length: ch.length,
       child: Scaffold(

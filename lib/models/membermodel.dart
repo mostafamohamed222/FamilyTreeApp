@@ -1,5 +1,5 @@
 class MemberModel {
-  String id, name, image, job, city, gender, phone;
+  String id, name, image, job, city, gender, phone, alive, type;
   String age;
   List<dynamic> sons, parents, couple;
   List<dynamic> allsons = [];
@@ -12,6 +12,8 @@ class MemberModel {
   }
 
   MemberModel({
+    this.type,
+    this.phone,
     this.id,
     this.name,
     this.image,
@@ -22,6 +24,7 @@ class MemberModel {
     this.sons,
     this.parents,
     this.couple,
+    this.alive,
   });
 
   void printModel() {

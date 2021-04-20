@@ -2,49 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/add.dart';
 import 'package:treeapp/models/memberContorller.dart';
-import 'package:treeapp/models/membermodel.dart';
 import 'package:treeapp/widget/card.dart';
 
 class MemberSons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<MemberContorller>(context).currentModel.sons);
+    print(Provider.of<MemberContorller>(context).userType);
 
     return Expanded(
       child: Provider.of<MemberContorller>(context).currentModel.sons.length ==
               1
           ? Center(
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Manager(
-                        type: "1",
-                      ),
+              child: Provider.of<MemberContorller>(context, listen: false)
+                          .userType ==
+                      "مستخدم"
+                  ? Center(
+                      child: Text("لا يوجد ابناء"),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Manager(
+                              type: "1",
+                            ),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Text("اضافة ابن"),
                     ),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Text("اضافة ابن"),
-              ),
             )
           : Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Manager(
-                          type: "1",
-                        ),
+                Provider.of<MemberContorller>(context, listen: false)
+                            .userType ==
+                        "مستخدم"
+                    ? Center(
+                        child: Text(""),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Manager(
+                                type: "1",
+                              ),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Text("اضافة ابن"),
                       ),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: Text("اضافة ابن"),
-                ),
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: (BuildContext, index) {
@@ -52,7 +63,11 @@ class MemberSons extends StatelessWidget {
                         margin: EdgeInsets.symmetric(vertical: 5),
                         height: MediaQuery.of(context).size.height * .12,
                         child: CardCustome(
-                          age: "1",
+                          age: Provider.of<MemberContorller>(context,
+                                  listen: false)
+                              .currentModel
+                              .allsons[index + 1]
+                              .age,
                           city: Provider.of<MemberContorller>(context,
                                   listen: false)
                               .currentModel

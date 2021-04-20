@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/models/memberContorller.dart';
-import 'package:treeapp/models/membermodel.dart';
 import 'package:treeapp/widget/card.dart';
 
 class MemberParents extends StatelessWidget {
@@ -21,7 +20,10 @@ class MemberParents extends StatelessWidget {
                   margin: EdgeInsets.symmetric(vertical: 5),
                   height: MediaQuery.of(context).size.height * .12,
                   child: CardCustome(
-                    age: "1",
+                    age: Provider.of<MemberContorller>(context, listen: false)
+                        .currentModel
+                        .allparents[index + 1]
+                        .age,
                     city: Provider.of<MemberContorller>(context, listen: false)
                         .currentModel
                         .allparents[index + 1]

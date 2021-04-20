@@ -13,37 +13,49 @@ class MemberCouple extends StatelessWidget {
       child:
           Provider.of<MemberContorller>(context).currentModel.couple.length == 1
               ? Center(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Manager(
-                            type: "2",
-                          ),
+                  child: Provider.of<MemberContorller>(context, listen: false)
+                              .userType ==
+                          "مستخدم"
+                      ? Center(
+                          child: Text("لا يوجد ازواج"),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Manager(
+                                  type: "2",
+                                ),
+                              ),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: Text("اضافة زوج/زوجة"),
                         ),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text("اضافة زوج"),
-                  ),
                 )
               : Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Manager(
-                              type: "2",
-                            ),
+                    Provider.of<MemberContorller>(context, listen: false)
+                                .userType ==
+                            "مستخدم"
+                        ? Center(
+                            child: Text(""),
+                          )
+                        : InkWell(
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Manager(
+                                    type: "2",
+                                  ),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            },
+                            child: Text("اضافة زوج/زوجة"),
                           ),
-                          (Route<dynamic> route) => false,
-                        );
-                      },
-                      child: Text("اضافة ابن"),
-                    ),
                     Expanded(
                       child: ListView.builder(
                         itemBuilder: (BuildContext, index) {
@@ -51,7 +63,11 @@ class MemberCouple extends StatelessWidget {
                             margin: EdgeInsets.symmetric(vertical: 5),
                             height: MediaQuery.of(context).size.height * .12,
                             child: CardCustome(
-                              age: "1",
+                              age: Provider.of<MemberContorller>(context,
+                                      listen: false)
+                                  .currentModel
+                                  .allcouples[index + 1]
+                                  .age,
                               city: Provider.of<MemberContorller>(context,
                                       listen: false)
                                   .currentModel
