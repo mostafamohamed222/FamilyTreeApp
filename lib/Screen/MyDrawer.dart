@@ -74,7 +74,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext) => Login(),
+                      builder: (BuildContext) => AboutUs(),
                     ),
                   );
                 },
@@ -110,23 +110,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext) => Manager()));
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
                   child: Text(
-                    "اضافة",
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
+                    "الاصدار رقم 1.0.0",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),

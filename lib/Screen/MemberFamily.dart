@@ -56,14 +56,13 @@ class MemberSons extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: FloatingActionButton.extended(
                               onPressed: () {
-                                Navigator.pushAndRemoveUntil(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Manager(
                                       type: "1",
                                     ),
                                   ),
-                                  (Route<dynamic> route) => false,
                                 );
                               },
                               label: const Text('اضافة ابن'),

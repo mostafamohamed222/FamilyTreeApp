@@ -270,6 +270,10 @@ class _FamilyListState extends State<FamilyList> {
             } else {
               Provider.of<MemberContorller>(context, listen: false).sortByAge();
             }
+
+            if (tyepp == "تنازلي") {
+              Provider.of<MemberContorller>(context, listen: false).rev();
+            }
             setState(() {
               print(value);
               namee = value;
@@ -295,8 +299,6 @@ class _FamilyListState extends State<FamilyList> {
           value: tyep[btnValue],
           groupValue: tyepp,
           onChanged: (value) {
-            Provider.of<MemberContorller>(context, listen: false).rev();
-
             setState(() {
               print(value);
               tyepp = value;
