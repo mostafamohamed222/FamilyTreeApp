@@ -17,6 +17,8 @@ class _GraphViewPageState extends State<GraphViewPage> {
   @override
   Widget build(BuildContext context) {
     List<Node> nodes = [];
+    graph = Graph();
+    builder = BuchheimWalkerConfiguration();
 
     for (var x
         in Provider.of<MemberContorller>(context, listen: false).allMember) {
@@ -68,22 +70,63 @@ class _GraphViewPageState extends State<GraphViewPage> {
                 ],
               ),
             ),
-            Expanded(
-              child: InteractiveViewer(
-                  constrained: false,
-                  boundaryMargin: EdgeInsets.all(100),
-                  minScale: 0.01,
-                  maxScale: 5.6,
-                  child: GraphView(
-                    graph: graph,
-                    algorithm: BuchheimWalkerAlgorithm(
-                        builder, TreeEdgeRenderer(builder)),
-                    paint: Paint()
-                      ..color = Colors.green
-                      ..strokeWidth = 1
-                      ..style = PaintingStyle.stroke,
-                  )),
-            ),
+            Provider.of<MemberContorller>(context, listen: false)
+                        .allMember
+                        .length ==
+                    1
+                ? InkWell(
+                    onTap: () {
+                      Provider.of<MemberContorller>(context, listen: false)
+                          .getMemberById(Provider.of<MemberContorller>(context,
+                                  listen: false)
+                              .allMember[0]
+                              .id);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Member(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        children: [
+                          Image(
+                            fit: BoxFit.fill,
+                            width: MediaQuery.of(context).size.width / 4,
+                            image: NetworkImage(
+                                Provider.of<MemberContorller>(context)
+                                    .allMember[0]
+                                    .image),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(Provider.of<MemberContorller>(context)
+                                .allMember[0]
+                                .name),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: InteractiveViewer(
+                      constrained: false,
+                      boundaryMargin: EdgeInsets.all(100),
+                      minScale: 0.01,
+                      maxScale: 5.6,
+                      child: GraphView(
+                        graph: graph,
+                        algorithm: BuchheimWalkerAlgorithm(
+                            builder, TreeEdgeRenderer(builder)),
+                        paint: Paint()
+                          ..color = Colors.green
+                          ..strokeWidth = 5
+                          ..style = PaintingStyle.stroke,
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
@@ -106,23 +149,26 @@ class _GraphViewPageState extends State<GraphViewPage> {
           ),
         );
       },
-      child: Column(
-        children: [
-          Image(
-            fit: BoxFit.fill,
-            width: MediaQuery.of(context).size.width / 4,
-            image: NetworkImage(x.image),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(x.name),
-          )
-        ],
+      child: Container(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Image(
+              fit: BoxFit.fill,
+              width: MediaQuery.of(context).size.width / 4,
+              image: NetworkImage(x.image),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(x.name),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  final Graph graph = Graph();
+  Graph graph = Graph();
   BuchheimWalkerConfiguration builder = BuchheimWalkerConfiguration();
 
   @override

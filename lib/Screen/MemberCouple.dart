@@ -77,7 +77,6 @@ class MemberCouple extends StatelessWidget {
                         itemBuilder: (BuildContext, index) {
                           return Container(
                             margin: EdgeInsets.symmetric(vertical: 5),
-                            height: MediaQuery.of(context).size.height * .12,
                             child: CardCustome(
                               age: Provider.of<MemberContorller>(context,
                                       listen: false)

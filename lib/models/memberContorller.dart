@@ -34,7 +34,7 @@ class MemberContorller with ChangeNotifier {
       }
     }
     userType = "مستخدم";
-    user = _allMember[1];
+    user = null;
     notifyListeners();
   }
 
