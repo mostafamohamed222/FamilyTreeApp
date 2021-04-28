@@ -1,24 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:treeapp/Screen/member.dart';
+import 'package:treeapp/Screen/update.dart';
 import 'package:treeapp/models/memberContorller.dart';
-import 'package:treeapp/models/membermodel.dart';
 
 class Details extends StatelessWidget {
   @override
-  @override
   Widget build(BuildContext context) {
-    Provider.of<MemberContorller>(context, listen: false)
-        .currentModel
-        .printModel();
     return Container(
       child: ListView(
         children: [
-          filed(
-              filedTiltle: "المهنة",
-              name: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .job),
+          Center(
+            child: Wrap(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Update(type:"first"),
+                        ),
+                      );
+                    },
+                    label: const Text('التعديل'),
+                    icon: const Icon(Icons.edit),
+                    backgroundColor: Colors.pink,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${Provider.of<MemberContorller>(context, listen: false).currentModel.job}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ': المهنة',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             child: Divider(
               indent: 25,
@@ -26,16 +64,39 @@ class Details extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          filed(
-              filedTiltle: "العمر ",
-              name: "(" +
-                  Provider.of<MemberContorller>(context, listen: false)
-                      .currentModel
-                      .alive +
-                  ")      " +
-                  Provider.of<MemberContorller>(context, listen: false)
-                      .currentModel
-                      .age),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "(" +
+                      Provider.of<MemberContorller>(context, listen: false)
+                          .currentModel
+                          .alive +
+                      ")      " +
+                      Provider.of<MemberContorller>(context, listen: false)
+                          .currentModel
+                          .age,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ': العمر',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             child: Divider(
               indent: 25,
@@ -43,11 +104,32 @@ class Details extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          filed(
-              filedTiltle: "المدينة",
-              name: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .city),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${Provider.of<MemberContorller>(context, listen: false).currentModel.city}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ': المدينة',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             child: Divider(
               indent: 25,
@@ -55,11 +137,32 @@ class Details extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          filed(
-              filedTiltle: "رقم الهاتف",
-              name: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .phone),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${Provider.of<MemberContorller>(context, listen: false).currentModel.phone}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ': رقم الهاتف',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             child: Divider(
               indent: 25,
@@ -67,11 +170,32 @@ class Details extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          filed(
-              filedTiltle: "النوع",
-              name: Provider.of<MemberContorller>(context, listen: false)
-                  .currentModel
-                  .gender),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${Provider.of<MemberContorller>(context, listen: false).currentModel.gender}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ': النوع ',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             child: Divider(
               indent: 25,
@@ -83,18 +207,4 @@ class Details extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget filed({String name, String filedTiltle}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    textDirection: TextDirection.rtl,
-    children: [
-      Text(
-        filedTiltle,
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-      ),
-      Text(name),
-    ],
-  );
 }

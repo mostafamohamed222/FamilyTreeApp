@@ -29,7 +29,6 @@ class _LoginState extends State<Login> {
     try {
       final authCredential =
           await _auth.signInWithCredential(phoneAuthCredential);
-      print('12456484');
       setState(() {
         showLoading = false;
       });

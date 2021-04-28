@@ -1,23 +1,27 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-
 import 'membermodel.dart';
 
 class MemberContorller with ChangeNotifier {
   bool _isGetMemberLoading = false;
+
   bool get isGetMemberLoading => _isGetMemberLoading;
 
   List<MemberModel> _allMember = [];
+
   List<MemberModel> get allMember => _allMember;
 
   List<MemberModel> select = [];
 
   bool _stakCon = false;
+
   bool get stakcon => _stakCon;
 
   bool _stakCon2 = false;
+
   bool get stakcon2 => _stakCon2;
 
   String userType;
@@ -25,6 +29,13 @@ class MemberContorller with ChangeNotifier {
   MemberModel user;
 
   void setType() {
+    if (_allMember.length == 0) {
+      userType = "مدير";
+      user = MemberModel(name: "", image: "", phone: "");
+      notifyListeners();
+      return;
+    }
+
     for (var x in _allMember) {
       if (x.phone == userNumber) {
         userType = x.type;
@@ -34,8 +45,17 @@ class MemberContorller with ChangeNotifier {
       }
     }
     userType = "مستخدم";
-    user = null;
+    user = _allMember[0];
     notifyListeners();
+  }
+
+  bool checkNumber(String phone) {
+    for (var x in _allMember) {
+      if (x.phone == phone) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void changeStak() {
@@ -86,37 +106,50 @@ class MemberContorller with ChangeNotifier {
 
     MemberModel newMember = getById(id);
 
-    await http.patch(url,
-        body: json.encode({
+    await http.patch(
+      url,
+      body: json.encode(
+        {
           "name": newMember.name,
+          "dday": newMember.dday,
+          "dmon": newMember.dmon,
+          "dyear": newMember.dyear,
           "job": newMember.job,
           "image": newMember.image,
           "city": newMember.city,
+          "email": newMember.email,
           "age": newMember.age,
+          "phone": newMember.phone,
           "parent": newMember.parents,
           "son": newMember.sons,
           "couple": newMember.couple,
           "alive": newMember.alive,
-        }));
+        },
+      ),
+    );
   }
 
   var url = Uri.parse(
       'https://treeproject-4a712-default-rtdb.firebaseio.com/member.json');
+
   void addmember(
       {String firstName,
       String lastName,
+      String imageUrl,
       String phone,
       String email,
       String city,
       String address,
       DateTime date,
+      DateTime death,
       String gender,
       int role,
       bool alive,
-      String parent,
+      var parent,
       String type,
       String job}) {
     DateTime now = DateTime.now();
+    String numberPhone = "$phone";
 
     if (type == "1") {
       print(alive);
@@ -128,25 +161,27 @@ class MemberContorller with ChangeNotifier {
             "name": "$firstName $lastName ",
             "type": role == 1 ? "مدير" : "مستخدم",
             "job": job,
-            "image":
-                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
+            "image": imageUrl,
             "city": city,
             "address": address,
             "gender": gender,
             "age": (now.year - date.year).toString(),
-            "phone": phone,
+            "phone": numberPhone,
             "email": email,
             "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent, parent],
             "son": [parent],
             "couple": [parent],
+            "dday": death.day,
+            "dmon": death.month,
+            "dyear": death.year,
           },
         ),
       )
           .then((value) {
         MemberModel newMember = MemberModel(
             gender: gender,
-            phone: phone,
+            phone: numberPhone,
             type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
@@ -157,9 +192,7 @@ class MemberContorller with ChangeNotifier {
             parents: [parent, parent],
             couple: [parent],
             sons: [parent],
-            image:
-                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612");
-
+            image: imageUrl);
         if (newMember.parents != null) {
           for (var inelement in newMember.parents) {
             MemberModel newSon = getById(inelement);
@@ -168,7 +201,8 @@ class MemberContorller with ChangeNotifier {
         }
 
         _allMember.add(newMember);
-
+        searchByName("");
+        //select.add(newMember);
         for (var x in _allMember) {
           if (x.id == parent) {
             x.sons.add(json.decode(value.body)['name']);
@@ -184,7 +218,7 @@ class MemberContorller with ChangeNotifier {
           }
         }
       });
-    } else {
+    } else if (type == "2") {
       http
           .post(
         url,
@@ -193,18 +227,20 @@ class MemberContorller with ChangeNotifier {
             "name": "$firstName $lastName ",
             "type": role == 1 ? "مدير" : "مستخدم",
             "job": job,
-            "image":
-                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612",
+            "image": imageUrl,
             "city": city,
             "address": address,
             "gender": gender,
             "age": (now.year - date.year).toString(),
-            "phone": phone,
+            "phone": numberPhone,
             "email": email,
             "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent],
             "son": [parent],
             "couple": [parent, parent],
+            "dday": death.day,
+            "dmon": death.month,
+            "dyear": death.year,
           },
         ),
       )
@@ -216,14 +252,13 @@ class MemberContorller with ChangeNotifier {
             age: (now.year - date.year).toString(),
             city: city,
             gender: gender,
-            phone: phone,
+            phone: numberPhone,
             job: job,
             name: "$firstName $lastName ",
             parents: [parent],
             couple: [parent, parent],
             sons: [parent],
-            image:
-                "https://media.gettyimages.com/photos/young-man-working-at-home-in-the-evening-picture-id1181035364?s=612x612");
+            image: imageUrl);
 
         if (newMember.couple != null) {
           for (var inelement in newMember.couple) {
@@ -233,7 +268,8 @@ class MemberContorller with ChangeNotifier {
         }
 
         _allMember.add(newMember);
-
+        searchByName("");
+        // select.add(newMember);
         for (var x in _allMember) {
           if (x.id == parent) {
             x.couple.add(json.decode(value.body)['name']);
@@ -249,6 +285,122 @@ class MemberContorller with ChangeNotifier {
           }
         }
       });
+    } else if (type == "3") {
+      print(alive);
+      http
+          .post(
+        url,
+        body: json.encode(
+          {
+            "name": "$firstName $lastName ",
+            "type": role == 1 ? "مدير" : "مستخدم",
+            "job": job,
+            "image": imageUrl,
+            "city": city,
+            "address": address,
+            "gender": gender,
+            "age": (now.year - date.year).toString(),
+            "phone": numberPhone,
+            "email": email,
+            "alive": alive == false ? "متوفي" : "حي",
+            "parent": [""],
+            "son": [""],
+            "couple": [""],
+            "dday": death.day,
+            "dmon": death.month,
+            "dyear": death.year,
+          },
+        ),
+      )
+          .then((value) {
+        MemberModel newMember = MemberModel(
+            gender: gender,
+            phone: numberPhone,
+            type: role == 1 ? "مدير" : "مستخدم",
+            alive: alive == false ? "متوفي" : "حي",
+            id: json.decode(value.body)['name'],
+            age: (now.year - date.year).toString(),
+            city: city,
+            job: job,
+            name: "$firstName $lastName ",
+            parents: [""],
+            couple: [""],
+            sons: [""],
+            image: imageUrl);
+        _allMember.add(newMember);
+        searchByName("");
+        //select.add(newMember);
+        notifyListeners();
+        FirebaseAuth _auth = FirebaseAuth.instance;
+        _auth.signOut();
+      });
+    } else {
+      http
+          .post(
+        url,
+        body: json.encode(
+          {
+            "name": "$firstName $lastName ",
+            "type": role == 1 ? "مدير" : "مستخدم",
+            "job": job,
+            "image": imageUrl,
+            "city": city,
+            "address": address,
+            "gender": gender,
+            "age": (now.year - date.year).toString(),
+            "phone": numberPhone,
+            "email": email,
+            "alive": alive == false ? "متوفي" : "حي",
+            "parent": [parent, parent],
+            "son": [parent],
+            "couple": [parent],
+            "dday": death.day,
+            "dmon": death.month,
+            "dyear": death.year,
+          },
+        ),
+      )
+          .then((value) {
+        MemberModel newMember = MemberModel(
+            type: role == 1 ? "مدير" : "مستخدم",
+            alive: alive == false ? "متوفي" : "حي",
+            id: json.decode(value.body)['name'],
+            age: (now.year - date.year).toString(),
+            city: city,
+            gender: gender,
+            phone: numberPhone,
+            job: job,
+            name: "$firstName $lastName ",
+            parents: [parent],
+            couple: [parent],
+            sons: [parent, parent],
+            image: imageUrl);
+
+        if (newMember.sons != null) {
+          for (var inelement in newMember.sons) {
+            MemberModel newSon = getById(inelement);
+            newMember.allsons.add(newSon);
+          }
+        }
+
+        _allMember.add(newMember);
+        //select.add(newMember);
+        searchByName("");
+        for (var x in _allMember) {
+          if (x.id == parent) {
+            x.parents.add(json.decode(value.body)['name']);
+            x.allparents = [];
+            if (x.parents != null) {
+              for (var inelement in x.parents) {
+                MemberModel newSon = getById(inelement);
+                x.allparents.add(newSon);
+              }
+            }
+            update(parent);
+            notifyListeners();
+          }
+        }
+      });
     }
   }
 
@@ -257,23 +409,35 @@ class MemberContorller with ChangeNotifier {
     notifyListeners();
     try {
       http.Response res = await http.get(url);
+      print(res.body.toString());
+      print("we are here");
+      if (res.body.toString() == "null") {
+        print("we are here");
+        _isGetMemberLoading = false;
+        notifyListeners();
+        print("we are here");
+        return;
+      } else {
+        print("we are in else");
+      }
       final data = json.decode(res.body) as Map<String, dynamic>;
       data.forEach((key, value) {
         final MemberModel _newMeal = MemberModel(
-          id: key,
-          type: value['type'],
-          image: value['image'],
-          alive: value['alive'],
-          name: value['name'],
-          age: value['age'],
-          city: value['city'],
-          gender: value['gender'],
-          job: value['job'],
-          sons: value['son'],
-          parents: value['parent'],
-          couple: value['couple'],
-          phone: value['phone'],
-        );
+            id: key,
+            type: value['type'],
+            image: value['image'],
+            alive: value['alive'],
+            name: value['name'],
+            age: value['age'],
+            city: value['city'],
+            gender: value['gender'],
+            job: value['job'],
+            sons: value['son'],
+            parents: value['parent'],
+            couple: value['couple'],
+            phone: value['phone'],
+            email: value['email'],
+            add: value['address']);
         _allMember.add(_newMeal);
       });
 
@@ -377,5 +541,25 @@ class MemberContorller with ChangeNotifier {
       }
     });
     return null;
+  }
+
+  int getNumberOfMela() {
+    int ret = 0;
+    for (var x in _allMember) {
+      if (x.gender == "ذكر") {
+        ret++;
+      }
+    }
+    return ret;
+  }
+
+  int getNumberOfFemales() {
+    int ret = 0;
+    for (var x in _allMember) {
+      if (x.gender == "انثي") {
+        ret++;
+      }
+    }
+    return ret;
   }
 }

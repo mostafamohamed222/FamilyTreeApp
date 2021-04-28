@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treeapp/Screen/addroot.dart';
 import 'package:treeapp/models/memberContorller.dart';
 import 'package:treeapp/widget/card.dart';
 import 'package:treeapp/widget/loading.dart';
@@ -13,21 +15,6 @@ class FamilyList extends StatefulWidget {
 }
 
 class _FamilyListState extends State<FamilyList> {
-  @override
-  void initState() {
-    if (Provider.of<MemberContorller>(context, listen: false)
-            .allMember
-            .length ==
-        0) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (timeStamp) {
-          Provider.of<MemberContorller>(context, listen: false)
-              .getMembersData();
-        },
-      );
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +74,19 @@ class _FamilyListState extends State<FamilyList> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "تم",
-                    style: TextStyle(
-                      color: Colors.yellow[500],
+                  GestureDetector(
+                    onTap: () {
+                      Provider.of<MemberContorller>(context, listen: false)
+                          .changeStak2();
+                      Provider.of<MemberContorller>(context, listen: false)
+                          .searchByName("");
+                    },
+                    child: Text(
+                      "الكل",
+                      style: TextStyle(
+                        color: Colors.amber,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                   Text(
@@ -227,6 +223,32 @@ class _FamilyListState extends State<FamilyList> {
       builder: (BuildContext) {
         if (Provider.of<MemberContorller>(context).isGetMemberLoading) {
           return Loading();
+        } else if (Provider.of<MemberContorller>(context).allMember.length ==
+            0) {
+          return Center(
+            child: Wrap(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManagerRoot(
+                            type: "3",
+                          ),
+                        ),
+                      );
+                    },
+                    label: const Text('اضافة اول شخص'),
+                    icon: const Icon(Icons.add),
+                    backgroundColor: Colors.pink,
+                  ),
+                ),
+              ],
+            ),
+          );
         } else {
           return ListView.builder(
             scrollDirection: Axis.vertical,
@@ -237,13 +259,13 @@ class _FamilyListState extends State<FamilyList> {
                   id: Provider.of<MemberContorller>(context).select[index].id,
                   age: Provider.of<MemberContorller>(context).select[index].age,
                   city:
-                      Provider.of<MemberContorller>(context).select[index].city,
+                  Provider.of<MemberContorller>(context).select[index].city,
                   image: Provider.of<MemberContorller>(context)
                       .select[index]
                       .image,
                   job: Provider.of<MemberContorller>(context).select[index].job,
                   name:
-                      Provider.of<MemberContorller>(context).select[index].name,
+                  Provider.of<MemberContorller>(context).select[index].name,
                 ),
               );
             },
@@ -300,6 +322,7 @@ class _FamilyListState extends State<FamilyList> {
           groupValue: tyepp,
           onChanged: (value) {
             setState(() {
+              Provider.of<MemberContorller>(context, listen: false).rev();
               print(value);
               tyepp = value;
             });

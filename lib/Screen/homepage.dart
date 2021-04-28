@@ -14,10 +14,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    if (Provider.of<MemberContorller>(context, listen: false)
+            .allMember
+            .length ==
+        0) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          Provider.of<MemberContorller>(context, listen: false)
+              .getMembersData();
+        },
+      );
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Provider.of<MemberContorller>(context, listen: false).userNumber =
-        "01140744366";
+        "+201151536008";
     return DefaultTabController(
+      initialIndex: 1,
       length: ch.length,
       child: Scaffold(
         drawer: MyDrawer(),
