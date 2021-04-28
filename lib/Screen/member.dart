@@ -34,26 +34,32 @@ class Member extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.yellow[600],
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: NetworkImage(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(
+                          Provider.of<MemberContorller>(context, listen: false)
+                              .currentModel
+                              .image),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
                         Provider.of<MemberContorller>(context, listen: false)
                             .currentModel
-                            .image),
-                  ),
-                  Text(
-                    Provider.of<MemberContorller>(context, listen: false)
-                        .currentModel
-                        .name,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                            .name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Container(
@@ -63,15 +69,19 @@ class Member extends StatelessWidget {
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: hch.map((e) {
                   return Tab(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    child: ListView(
                       children: [
-                        Text(
-                          e.title,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.brown,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              e.title,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.brown,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -82,8 +92,8 @@ class Member extends StatelessWidget {
             Expanded(
               child: TabBarView(
                   children: hch.map((e) {
-                return PageChoice(e);
-              }).toList()),
+                    return PageChoice(e);
+                  }).toList()),
             ),
           ],
         ),
@@ -113,9 +123,9 @@ class PageChoice extends StatelessWidget {
     return choice.title == "تفاصيل"
         ? Details()
         : choice.title == "الابناء"
-            ? MemberSons()
-            : choice.title == "الوالدين"
-                ? MemberParents()
-                : MemberCouple();
+        ? MemberSons()
+        : choice.title == "الوالدين"
+        ? MemberParents()
+        : MemberCouple();
   }
 }

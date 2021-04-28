@@ -4,15 +4,11 @@ import 'package:treeapp/Screen/member.dart';
 import 'package:treeapp/models/memberContorller.dart';
 
 class CardCustome extends StatefulWidget {
-  final String name, image, job, city, id;
-  final String age;
-
+  final String name, image, job, city, id,age;
   CardCustome({this.age, this.city, this.image, this.job, this.name, this.id});
-
   @override
   _CardCustomeState createState() => _CardCustomeState();
 }
-
 class _CardCustomeState extends State<CardCustome> {
   @override
   Widget build(BuildContext context) {

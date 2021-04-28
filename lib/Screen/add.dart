@@ -19,7 +19,7 @@ class Manager extends StatefulWidget {
 
 class _ManagerState extends State<Manager> {
   bool loading = false;
-  DateTime birthDate, deathDate;
+  DateTime birthDate, deathDate ;
   UploadTask task;
   final _formKey = GlobalKey<FormState>();
   TextEditingController _firstNameTextController = TextEditingController();
@@ -98,7 +98,6 @@ class _ManagerState extends State<Manager> {
       ],
     );
   }
-
   //select image picker dailog
   File imageFile;
   String url;
@@ -139,7 +138,6 @@ class _ManagerState extends State<Manager> {
           );
         });
   }
-
   opengallary(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.gallery);
     this.setState(() {
@@ -147,7 +145,6 @@ class _ManagerState extends State<Manager> {
     });
     Navigator.of(context).pop();
   }
-
   opencamera(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.camera);
     this.setState(() {
@@ -155,7 +152,6 @@ class _ManagerState extends State<Manager> {
     });
     Navigator.of(context).pop();
   }
-
   Widget imagaeView() {
     if (imageFile == null) {
       return Text('لم يتم تحديد الصورة');
@@ -170,18 +166,16 @@ class _ManagerState extends State<Manager> {
       );
     }
   }
-
-  Future uploadImage() async {
-    if (imageFile == null) return;
-    final imagename = imageFile.path;
-    final des = 'files/$imagename';
-    task = FirebaseApi.uploadFile(des, imageFile);
-    if (task == null) return;
-    final snapshot = await task.whenComplete(() {});
-    final urlDownload = await snapshot.ref.getDownloadURL();
+  Future uploadImage()async{
+    if(imageFile==null)return;
+    final imagename=imageFile.path;
+    final des= 'files/$imagename';
+    task =FirebaseApi.uploadFile(des, imageFile);
+    if(task==null)return;
+    final snapshot=await task.whenComplete(() {});
+    final urlDownload=await snapshot.ref.getDownloadURL();
     url = urlDownload;
   }
-
   @override
   Widget build(BuildContext context) {
     if (widget.type == "1") {
@@ -255,7 +249,7 @@ class _ManagerState extends State<Manager> {
                           keyboardType: TextInputType.multiline,
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: "الاسم الاول",
+                            hintText:"الاسم الاول",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
@@ -280,10 +274,10 @@ class _ManagerState extends State<Manager> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          controller: _lastNameTextController,
+                          controller:  _lastNameTextController,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return "من فضلك ادخل  اسم الاب";
+                              return  "من فضلك ادخل  اسم الاب";
                             } else {
                               return null;
                             }
@@ -301,7 +295,8 @@ class _ManagerState extends State<Manager> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          controller: _jobTextController,
+                          controller:  _jobTextController,
+
                         ),
                       ),
                       Padding(
@@ -311,11 +306,12 @@ class _ManagerState extends State<Manager> {
                           keyboardType: TextInputType.phone,
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: "رقم الهاتف ",
+                            hintText:"رقم الهاتف ",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          controller: _numberTextController,
+                          controller:  _numberTextController,
+
                         ),
                       ),
                       Padding(
@@ -339,11 +335,11 @@ class _ManagerState extends State<Manager> {
                           keyboardType: TextInputType.multiline,
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: "اسم المدينة",
+                            hintText:  "اسم المدينة",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          controller: _cityTextController,
+                          controller:_cityTextController,
                         ),
                       ),
                       Padding(
@@ -353,11 +349,11 @@ class _ManagerState extends State<Manager> {
                           keyboardType: TextInputType.multiline,
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: "الحي",
+                            hintText:  "الحي",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          controller: _addressTextController,
+                          controller:_addressTextController,
                         ),
                       ),
                       DateTimeFormField(
@@ -368,7 +364,7 @@ class _ManagerState extends State<Manager> {
                           errorStyle: TextStyle(color: Colors.redAccent),
                           border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
+                              BorderRadius.all(Radius.circular(20))),
                           prefixIcon: Icon(Icons.event_note),
                           suffixText: 'تاريخ الميلاد',
                         ),
@@ -376,7 +372,6 @@ class _ManagerState extends State<Manager> {
                         autovalidateMode: AutovalidateMode.always,
                         onDateSelected: (DateTime value) {
                           birthDate = value;
-                          deathDate = value;
                           print(birthDate);
                         },
                       ),
@@ -399,24 +394,25 @@ class _ManagerState extends State<Manager> {
                       ),
                       alive == false
                           ? DateTimeFormField(
-                              decoration: const InputDecoration(
-                                hintStyle: TextStyle(
-                                  color: Colors.black45,
-                                ),
-                                errorStyle: TextStyle(color: Colors.redAccent),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                prefixIcon: Icon(Icons.event_note),
-                                labelText: '',
-                                suffixText: 'تاريخ الوفاة',
-                              ),
-                              mode: DateTimeFieldPickerMode.date,
-                              autovalidateMode: AutovalidateMode.always,
-                              onDateSelected: (DateTime value) {
-                                deathDate = value;
-                              },
-                            )
+                        decoration: const InputDecoration(
+                          hintStyle: TextStyle(
+                            color: Colors.black45,
+                          ),
+                          errorStyle: TextStyle(color: Colors.redAccent),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20))),
+                          prefixIcon: Icon(Icons.event_note),
+                          labelText: '',
+                          suffixText: 'تاريخ الوفاة',
+                        ),
+                        mode: DateTimeFieldPickerMode.date,
+                        autovalidateMode: AutovalidateMode.always,
+                        onDateSelected: (DateTime value) {
+                          deathDate = value;
+
+                        },
+                      )
                           : Text(""),
                       Divider(
                         color: Colors.indigo,
@@ -427,47 +423,28 @@ class _ManagerState extends State<Manager> {
                           borderRadius: BorderRadius.circular(20.0),
                           color: Colors.indigo,
                           child: MaterialButton(
-                            onPressed: () async {
+                            onPressed: () async{
                               await uploadImage();
                               if (_formKey.currentState.validate()) {
                                 Provider.of<MemberContorller>(context,
-                                        listen: false)
+                                    listen: false)
                                     .addmember(
-                                  job: _jobTextController == null ||
-                                          _jobTextController.text == ""
-                                      ? "غير معروف"
-                                      : _jobTextController.text,
-                                  imageUrl: imageFile == null ||
-                                          url == "" ||
-                                          url == null
-                                      ? "https://louisville.edu/enrollmentmanagement/images/person-icon/image"
-                                      : url,
+                                  job: _jobTextController==null||_jobTextController.text==""?"غير معروف":_jobTextController.text,
+                                  imageUrl:imageFile==null||url==""||url==null?'https://louisville.edu/enrollmentmanagement/images/person-icon/image':url,
                                   alive: alive,
                                   gender: genderr,
                                   role: clientORmanager,
                                   type: widget.type,
-                                  address: _addressTextController == null ||
-                                          _addressTextController.text == ""
-                                      ? "غير معروف"
-                                      : _addressTextController.text,
-                                  city: _cityTextController == null ||
-                                          _cityTextController.text == ""
-                                      ? "غير معروف"
-                                      : _cityTextController.text,
-                                  date: birthDate,
-                                  email: _emailTextController == null ||
-                                          _emailTextController.text == ""
-                                      ? "غير معروف"
-                                      : _emailTextController.text,
+                                  address: _addressTextController==null||_addressTextController.text==""?"غير معروف":_addressTextController.text,
+                                  city:_cityTextController==null||_cityTextController.text==""?"غير معروف":_cityTextController.text,
+                                  date: birthDate==null?null:birthDate,
+                                  email: _emailTextController==null||_emailTextController.text==""?"غير معروف":_emailTextController.text,
                                   firstName: _firstNameTextController.text,
                                   lastName: _lastNameTextController.text,
-                                  phone: _numberTextController == null ||
-                                          _numberTextController.text == ""
-                                      ? "غير معروف"
-                                      : _numberTextController.text,
-                                  death: deathDate,
+                                  phone: _numberTextController==null||_numberTextController.text==""?"غير معروف":_numberTextController.text,
+                                  death: deathDate==null?null:deathDate,
                                   parent: Provider.of<MemberContorller>(context,
-                                          listen: false)
+                                      listen: false)
                                       .currentModel
                                       .id,
                                 );
@@ -475,7 +452,7 @@ class _ManagerState extends State<Manager> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomePage()),
-                                  (Route<dynamic> route) => false,
+                                      (Route<dynamic> route) => false,
                                 );
                               } else {
                                 return null;
@@ -501,7 +478,7 @@ class _ManagerState extends State<Manager> {
                             color: Colors.white.withOpacity(0.7),
                             child: CircularProgressIndicator(
                               valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.red),
+                              AlwaysStoppedAnimation<Color>(Colors.red),
                             ),
                           ),
                         ),

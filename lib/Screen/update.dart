@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:date_field/date_field.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/homepage.dart';
+import 'package:treeapp/Screen/uploadimageapi.dart';
 import 'package:treeapp/models/memberContorller.dart';
 
 class Update extends StatefulWidget {
@@ -17,6 +19,7 @@ class Update extends StatefulWidget {
 
 class _UpdateState extends State<Update> {
   bool loading = false;
+  UploadTask task;
   DateTime birthDate;
   DateTime deathDate;
   final _formKey = GlobalKey<FormState>();
@@ -26,6 +29,7 @@ class _UpdateState extends State<Update> {
   TextEditingController _cityTextController = TextEditingController();
   TextEditingController _addressTextController = TextEditingController();
   TextEditingController _jobTextController = TextEditingController();
+
 
   //select gender method
   List gender = ["ذكر", "انثي"];
@@ -98,6 +102,7 @@ class _UpdateState extends State<Update> {
 
   //select image picker dailog
   File imageFile;
+  String url;
   final picker = ImagePicker();
   Future<void> showCoiceDialog(BuildContext context) {
     return showDialog(
@@ -135,7 +140,6 @@ class _UpdateState extends State<Update> {
           );
         });
   }
-
   opengallary(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.gallery);
     this.setState(() {
@@ -143,7 +147,6 @@ class _UpdateState extends State<Update> {
     });
     Navigator.of(context).pop();
   }
-
   opencamera(BuildContext context) async {
     var picture = await ImagePicker().getImage(source: ImageSource.camera);
     this.setState(() {
@@ -151,7 +154,6 @@ class _UpdateState extends State<Update> {
     });
     Navigator.of(context).pop();
   }
-
   Widget imagaeView() {
     if (imageFile == null) {
       return Text('لم يتم تحديد الصورة');
@@ -165,6 +167,16 @@ class _UpdateState extends State<Update> {
         ),
       );
     }
+  }
+  Future uploadImage()async{
+    if(imageFile==null)return;
+    final imagename=imageFile.path;
+    final des= 'files/$imagename';
+    task =FirebaseApi.uploadFile(des, imageFile);
+    if(task==null)return;
+    final snapshot=await task.whenComplete(() {});
+    final urlDownload=await snapshot.ref.getDownloadURL();
+    url = urlDownload;
   }
 
   filed({
@@ -199,10 +211,13 @@ class _UpdateState extends State<Update> {
   Widget build(BuildContext context) {
     if (widget.type == "first") {
       print("hi");
+
       _firstNameTextController.text =
           Provider.of<MemberContorller>(context).currentModel.name;
       _cityTextController.text =
           Provider.of<MemberContorller>(context).currentModel.city;
+      _addressTextController.text =
+          Provider.of<MemberContorller>(context).currentModel.add;
       _numberTextController.text =
           Provider.of<MemberContorller>(context).currentModel.phone;
       _jobTextController.text =
@@ -229,10 +244,23 @@ class _UpdateState extends State<Update> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      filed(
-                        hintText: "الاسم ",
-                        validatorMass: "من فضلك ادخل الاسم ",
-                        cont: _firstNameTextController,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: Column(
+                            children: [
+                              imagaeView(),
+                              IconButton(
+                                icon: const Icon(Icons.photo_camera,
+                                    size: 50, color: Colors.brown),
+                                tooltip: 'حدد صورة',
+                                onPressed: () async {
+                                  await showCoiceDialog(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                       filed(
                         hintText: "الوظيقة",
@@ -256,11 +284,6 @@ class _UpdateState extends State<Update> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'من فضلك ادخل البريد الالكتروني';
-                            }
-                          },
                           controller: _emailTextController,
                         ),
                       ),
@@ -293,28 +316,25 @@ class _UpdateState extends State<Update> {
                       ),
                       alive == false
                           ? DateTimeFormField(
-                              decoration: const InputDecoration(
-                                hintStyle: TextStyle(
-                                  color: Colors.black45,
-                                ),
-                                errorStyle: TextStyle(color: Colors.redAccent),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                prefixIcon: Icon(Icons.event_note),
-                                labelText: '',
-                                suffixText: 'تاريخ الوفاة',
-                              ),
-                              mode: DateTimeFieldPickerMode.date,
-                              autovalidateMode: AutovalidateMode.always,
-                              validator: (e) => (e?.day ?? 0) == 1
-                                  ? 'Please not the first day'
-                                  : null,
-                              onDateSelected: (DateTime value) {
-                                deathDate = value;
-                              },
-                            )
-                          : Text(""),
+                        decoration: const InputDecoration(
+                          hintStyle: TextStyle(
+                            color: Colors.black45,
+                          ),
+                          errorStyle: TextStyle(color: Colors.redAccent),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20))),
+                          prefixIcon: Icon(Icons.event_note),
+                          labelText: '',
+                          suffixText: 'تاريخ الوفاة',
+                        ),
+                        mode: DateTimeFieldPickerMode.date,
+                        autovalidateMode: AutovalidateMode.always,
+                        onDateSelected: (DateTime value) {
+                          deathDate = value;
+                        },
+                      )
+                          :Text("") ,
                       Divider(
                         color: Colors.indigo,
                       ),
@@ -324,40 +344,44 @@ class _UpdateState extends State<Update> {
                           borderRadius: BorderRadius.circular(20.0),
                           color: Colors.indigo,
                           child: MaterialButton(
-                            onPressed: () {
+                            onPressed: () async{
+                              await uploadImage();
                               if (_formKey.currentState.validate()) {
                                 for (var x in Provider.of<MemberContorller>(
-                                        context,
-                                        listen: false)
+                                    context,
+                                    listen: false)
                                     .allMember) {
                                   if (x.id ==
                                       Provider.of<MemberContorller>(context,
-                                              listen: false)
+                                          listen: false)
                                           .currentModel
                                           .id) {
-                                    x.name = _firstNameTextController.text;
+                                    x.image=url!=null?url:x.image;
                                     x.city = _cityTextController.text;
                                     x.phone = _numberTextController.text;
                                     x.job = _jobTextController.text;
                                     x.email = _emailTextController.text;
                                     x.alive = alive == false ? "متوفي" : "حي";
-                                    x.dday = deathDate.day.toString();
-                                    x.dmon = deathDate.month.toString();
-                                    x.dyear = deathDate.year.toString();
+                                    x.add=_addressTextController.text;
+                                 if(deathDate!=null){
+                                   x.dday = deathDate.day.toString();
+                                   x.dmon = deathDate.month.toString();
+                                   x.dyear = deathDate.year.toString();
+                                 }
                                   }
                                 }
                                 Provider.of<MemberContorller>(context,
-                                        listen: false)
+                                    listen: false)
                                     .update(Provider.of<MemberContorller>(
-                                            context,
-                                            listen: false)
-                                        .currentModel
-                                        .id);
+                                    context,
+                                    listen: false)
+                                    .currentModel
+                                    .id);
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomePage()),
-                                  (Route<dynamic> route) => false,
+                                      (Route<dynamic> route) => false,
                                 );
                               } else {
                                 return null;
@@ -383,7 +407,7 @@ class _UpdateState extends State<Update> {
                             color: Colors.white.withOpacity(0.7),
                             child: CircularProgressIndicator(
                               valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.red),
+                              AlwaysStoppedAnimation<Color>(Colors.red),
                             ),
                           ),
                         ),

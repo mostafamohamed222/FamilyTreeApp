@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/MyDrawer.dart';
@@ -13,26 +14,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    if (Provider.of<MemberContorller>(context, listen: false)
-            .allMember
-            .length ==
-        0) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (timeStamp) {
-          Provider.of<MemberContorller>(context, listen: false)
-              .getMembersData();
-        },
-      );
-    }
-    super.initState();
-  }
+  FirebaseAuth _auth;
+  User _user;
 
   @override
+  void initState() {
+    _auth = FirebaseAuth.instance;
+    this._user = _auth.currentUser;
+
+    print("end home");
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    Provider.of<MemberContorller>(context, listen: false).userNumber =
-        "+201151536008";
+    print(_user.phoneNumber);
+    Provider.of<MemberContorller>(context, listen: false).userNumber =_user.phoneNumber;
     return DefaultTabController(
       initialIndex: 1,
       length: ch.length,
@@ -45,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
           title: TabBar(
             isScrollable: true,
-            indicatorColor: Colors.yellow,
+            indicatorColor: Colors.amber,
             indicatorWeight: 5.0,
             tabs: ch.map((e) {
               return Tab(
@@ -71,8 +67,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: TabBarView(
             children: ch.map((e) {
-          return PageChoice(e);
-        }).toList()),
+              return PageChoice(e);
+            }).toList()),
       ),
     );
   }
@@ -86,7 +82,7 @@ class Choice {
 
 List<Choice> ch = [
   Choice(title: "افراد العايلة", icon: Icons.list_rounded),
-  Choice(title: "شجرة العايلة", icon: Icons.pages_rounded),
+  Choice(title: "شجرة العايلة", icon: Icons.family_restroom_rounded),
 ];
 
 class PageChoice extends StatelessWidget {

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:treeapp/Screen/aboutapp.dart';
 import 'package:treeapp/Screen/connectwithus.dart';
+import 'package:treeapp/Screen/loginpage.dart';
 import 'package:treeapp/models/memberContorller.dart';
 
-import 'LoginScreen.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -27,16 +27,14 @@ class _MyDrawerState extends State<MyDrawer> {
                 decoration: BoxDecoration(
                   color: Colors.amber,
                 ),
-                accountName: new Text(
-                  Provider.of<MemberContorller>(context).user.name,
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                accountEmail: new Text(
-                  Provider.of<MemberContorller>(context).user.phone,
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
+                accountName: new  Text(Provider.of<MemberContorller>(context).user.name,style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold
+                ),),
+                accountEmail:  new  Text(Provider.of<MemberContorller>(context).user.phone,style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
+                ),),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.brown,
                   backgroundImage: NetworkImage(
@@ -114,7 +112,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => Login()),
-                      (Route<dynamic> route) => false,
+                          (Route<dynamic> route) => false,
                     );
                   },
                   child: Container(

@@ -400,7 +400,6 @@ class _ManagerRootState extends State<ManagerRoot> {
                         autovalidateMode: AutovalidateMode.always,
                         onDateSelected: (DateTime value) {
                           birthDate = value;
-                          deathDate=value;
                         },
                       ),
                       alive == false
@@ -456,7 +455,7 @@ class _ManagerRootState extends State<ManagerRoot> {
                                 Provider.of<MemberContorller>(context,
                                     listen: false)
                                     .addmember(
-                                  imageUrl: imageFile==null||url==""||url==null?"لايوجد":url,
+                                  imageUrl: imageFile==null||url==""||url==null?'https://louisville.edu/enrollmentmanagement/images/person-icon/image':url,
                                   job:_jobTextController==null||_jobTextController.text==""?"غير معروف":_jobTextController.text,
                                   alive: alive,
                                   gender: genderr,
@@ -464,8 +463,8 @@ class _ManagerRootState extends State<ManagerRoot> {
                                   type: widget.type,
                                   address: _addressTextController==null||_addressTextController.text==""?"غير معروف":_addressTextController.text,
                                   city: _cityTextController==null||_cityTextController.text==""?"غير معروف":_cityTextController.text,
-                                  date: birthDate,
-                                  death: deathDate,
+                                  date:birthDate==null?null:birthDate,
+                                  death:  deathDate==null?null:deathDate,
                                   email: _emailTextController==null||_emailTextController.text==""?"غير معروف":_emailTextController.text,
                                   firstName: _firstNameTextController.text,
                                   lastName: _lastNameTextController.text,

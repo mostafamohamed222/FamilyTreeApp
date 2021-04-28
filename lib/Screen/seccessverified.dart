@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:treeapp/Screen/homepage.dart';
 
 class Success extends StatelessWidget {
+
   final String mobile;
   Success({Key key, @required this.mobile}) : super(key: key);
   @override
@@ -53,9 +54,7 @@ class Success extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage(
-                                          phone: mobile,
-                                        )));
+                                    builder: (context) => HomePage(phone: mobile,)));
                           },
                           minWidth: MediaQuery.of(context).size.width,
                           child: Text(

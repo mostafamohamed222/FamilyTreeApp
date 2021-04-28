@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
+import 'package:treeapp/Screen/splashscreen.dart';
 import 'membermodel.dart';
 
 class MemberContorller with ChangeNotifier {
@@ -134,20 +136,20 @@ class MemberContorller with ChangeNotifier {
 
   void addmember(
       {String firstName,
-      String lastName,
-      String imageUrl,
-      String phone,
-      String email,
-      String city,
-      String address,
-      DateTime date,
-      DateTime death,
-      String gender,
-      int role,
-      bool alive,
-      var parent,
-      String type,
-      String job}) {
+        String lastName,
+        String imageUrl,
+        String phone,
+        String email,
+        String city,
+        String address,
+        DateTime date,
+        DateTime death,
+        String gender,
+        int role,
+        bool alive,
+        var parent,
+        String type,
+        String job}) {
     DateTime now = DateTime.now();
     String numberPhone = "$phone";
 
@@ -165,16 +167,16 @@ class MemberContorller with ChangeNotifier {
             "city": city,
             "address": address,
             "gender": gender,
-            "age": (now.year - date.year).toString(),
+            "age": date==null?"غير معروف":(now.year - date.year).toString(),
             "phone": numberPhone,
             "email": email,
             "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent, parent],
             "son": [parent],
             "couple": [parent],
-            "dday": death.day,
-            "dmon": death.month,
-            "dyear": death.year,
+            "dday":death==null?"غير معروف": death.day,
+            "dmon":death==null?"غير معروف": death.month,
+            "dyear": death==null?"غير معروف":death.year,
           },
         ),
       )
@@ -185,7 +187,7 @@ class MemberContorller with ChangeNotifier {
             type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
-            age: (now.year - date.year).toString(),
+            age: date==null?"غير معروف":(now.year - date.year).toString(),
             city: city,
             job: job,
             name: "$firstName $lastName ",
@@ -231,16 +233,16 @@ class MemberContorller with ChangeNotifier {
             "city": city,
             "address": address,
             "gender": gender,
-            "age": (now.year - date.year).toString(),
+            "age": date==null?"غير معروف":(now.year - date.year).toString(),
             "phone": numberPhone,
             "email": email,
             "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent],
             "son": [parent],
             "couple": [parent, parent],
-            "dday": death.day,
-            "dmon": death.month,
-            "dyear": death.year,
+            "dday": death==null?"غير معروف":death.day,
+            "dmon": death==null?"غير معروف":death.month,
+            "dyear":death==null?"غير معروف": death.year,
           },
         ),
       )
@@ -249,7 +251,7 @@ class MemberContorller with ChangeNotifier {
             type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
-            age: (now.year - date.year).toString(),
+            age: date==null?"غير معروف":(now.year - date.year).toString(),
             city: city,
             gender: gender,
             phone: numberPhone,
@@ -299,16 +301,16 @@ class MemberContorller with ChangeNotifier {
             "city": city,
             "address": address,
             "gender": gender,
-            "age": (now.year - date.year).toString(),
+            "age": date==null?"غير معروف":(now.year - date.year).toString(),
             "phone": numberPhone,
             "email": email,
             "alive": alive == false ? "متوفي" : "حي",
             "parent": [""],
             "son": [""],
             "couple": [""],
-            "dday": death.day,
-            "dmon": death.month,
-            "dyear": death.year,
+            "dday":death==null?"غير معروف": death.day,
+            "dmon": death==null?"غير معروف":death.month,
+            "dyear":death==null?"غير معروف": death.year,
           },
         ),
       )
@@ -319,7 +321,7 @@ class MemberContorller with ChangeNotifier {
             type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
-            age: (now.year - date.year).toString(),
+            age: date==null?"غير معروف":(now.year - date.year).toString(),
             city: city,
             job: job,
             name: "$firstName $lastName ",
@@ -347,16 +349,16 @@ class MemberContorller with ChangeNotifier {
             "city": city,
             "address": address,
             "gender": gender,
-            "age": (now.year - date.year).toString(),
+            "age": date==null?"غير معروف":(now.year - date.year).toString(),
             "phone": numberPhone,
             "email": email,
             "alive": alive == false ? "متوفي" : "حي",
             "parent": [parent, parent],
             "son": [parent],
             "couple": [parent],
-            "dday": death.day,
-            "dmon": death.month,
-            "dyear": death.year,
+            "dday": death==null?"غير معروف":death.day,
+            "dmon":death==null?"غير معروف": death.month,
+            "dyear":death==null?"غير معروف": death.year,
           },
         ),
       )
@@ -365,7 +367,7 @@ class MemberContorller with ChangeNotifier {
             type: role == 1 ? "مدير" : "مستخدم",
             alive: alive == false ? "متوفي" : "حي",
             id: json.decode(value.body)['name'],
-            age: (now.year - date.year).toString(),
+            age:  date==null?"غير معروف":(now.year - date.year).toString(),
             city: city,
             gender: gender,
             phone: numberPhone,
@@ -423,21 +425,22 @@ class MemberContorller with ChangeNotifier {
       final data = json.decode(res.body) as Map<String, dynamic>;
       data.forEach((key, value) {
         final MemberModel _newMeal = MemberModel(
-            id: key,
-            type: value['type'],
-            image: value['image'],
-            alive: value['alive'],
-            name: value['name'],
-            age: value['age'],
-            city: value['city'],
-            gender: value['gender'],
-            job: value['job'],
-            sons: value['son'],
-            parents: value['parent'],
-            couple: value['couple'],
-            phone: value['phone'],
-            email: value['email'],
-            add: value['address']);
+          id: key,
+          type: value['type'],
+          image: value['image'],
+          alive: value['alive'],
+          name: value['name'],
+          age: value['age'],
+          city: value['city'],
+          gender: value['gender'],
+          job: value['job'],
+          sons: value['son'],
+          parents: value['parent'],
+          couple: value['couple'],
+          phone: value['phone'],
+          email: value['email'],
+          add:value['address']
+        );
         _allMember.add(_newMeal);
       });
 
@@ -563,3 +566,4 @@ class MemberContorller with ChangeNotifier {
     return ret;
   }
 }
+

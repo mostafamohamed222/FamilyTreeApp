@@ -27,10 +27,24 @@ class _AboutUsState extends State<AboutUs> {
             title: Center(child: Text("عن التطبيق")),
             children: [
               Center(
-                child: Text(
-                  "هنكتب الكلام هنا ياااا",
-                  textAlign: TextAlign.right,
-                ),
+                child: ListView(
+                  children: [
+                    Image.asset(
+                      'assets/2.png',
+                      width: 100,
+                      height: 90,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "هنكتب الكلام هنا ياااا  هنكتب الكلام هنا يااا   هنكتب الكلام هنا يااا  هنكتب الكلام هنا يااا  هنكتب الكلام هنا يااا  هنكتب الكلام هنا يااا",
+                        textAlign: TextAlign.right,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 20,
+                      ),
+                    ),
+                  ],
+                )
               ),
             ],
           ),
